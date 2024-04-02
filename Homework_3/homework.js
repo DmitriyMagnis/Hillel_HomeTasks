@@ -13,12 +13,12 @@ const headString = 'There are 8 language types in JavaScript:';
 
 console.log(
 	headString + '\n'
-	 + string + '\n'
-	  + number + '\n'
-		 + undefineD + '\n'
-		  + nullable + '\n'
-			 + bool + '\n'
-			  + bigInt + '\n'
-				 + object + '\n'
-				  + symbol
+	+ string + '\n'
+	+ number + '\n'
+	+ undefineD + '\n'
+	+ nullable + '\n'
+	+ bool + '\n'
+	+ bigInt + '\n'
+	+ object + '\n'
+	+ symbol
 );
