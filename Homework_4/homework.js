@@ -2,6 +2,15 @@
 
 const inputNumber = 10369;
 
-const outputNumber = String(inputNumber).split('').join(' ');
+const strigifiedNumber = String(inputNumber);
 
-console.log(outputNumber);
+const addSpaces = strigifiedNumber.substring(0, 1) + ' ' 
+								+ strigifiedNumber.substring(1, 2) + ' ' 
+								+ strigifiedNumber.substring(2, 3) + ' ' 
+								+ strigifiedNumber.substring(3, 4) + ' '  
+								+ strigifiedNumber.substring(4, 5);
+
+console.log(addSpaces);
+
+// const outputNumber = String(inputNumber).split('').join(' ');
+// const outputNumber = String(inputNumber).replace(/(\d)(?=(\d)+(\D|$))/g, '$1' + ' ');
