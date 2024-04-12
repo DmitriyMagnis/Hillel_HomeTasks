@@ -1,6 +1,7 @@
 'use strict';
 
 const currencyInput = prompt('Pick exchange course', 'USD, EUR')?.trim();
+
 const USDCURRENCYRATE = 26;
 const EURCURRENCYRATE = 46;
 const OTHERCURRENCYRATE = 76;
@@ -31,8 +32,6 @@ if (currencyInput) {
 	console.log(outputRates);
 
 } else alert('wrong input');
-
-
 
 
 
