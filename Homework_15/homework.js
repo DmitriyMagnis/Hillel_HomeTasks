@@ -8,6 +8,6 @@ function removeElement(array = [], item) {
   array.splice(itemIndex, 1);
 }
 
-removeElement(array, 4);
+removeElement(array, 5);
 
 console.log(array); // Результат: [1, 3, 6, 2, 5, 7]
