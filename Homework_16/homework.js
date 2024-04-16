@@ -1,7 +1,7 @@
-function sumClosure(number) {
-  let sum = number ?? 0;
-  return function (num) {
-    return (sum += num ?? 0);
+function sumClosure(number = 0) {
+  let sum = number;
+  return function (num = 0) {
+    return (sum += num);
   };
 }
 
