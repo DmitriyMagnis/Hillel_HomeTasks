@@ -1,16 +1,9 @@
-function User(name, surname, birthday) {
-  this.name = name;
-  this.surname = surname;
-  this.birthday = birthday;
-}
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 8];
 
-User.prototype.getInfo = function () {
-  return {
-    name: this.name,
-    surname: this.surname,
-    birthday: this.birthday,
-  };
+const getEvenNumbers = (arr = []) => {
+  if (!Array.isArray(arr)) throw Error('wrong Input');
+  return arr.filter(value => value % 2 === 0);
 };
 
-const user = new User('MyName', 'MySurname', '19.08.2000');
-console.log(user.getInfo());
+const even = getEvenNumbers(arr);
+console.log(even); // [2, 4, 6, 8]
