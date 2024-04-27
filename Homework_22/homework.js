@@ -1,7 +1,7 @@
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 8];
 
 const getEvenNumbers = (arr = []) => {
-  if (!Array.isArray(arr)) throw Error('wrong Input');
+  if (!Array.isArray(arr)) return 'wrong Input';
   return arr.filter(value => value % 2 === 0);
 };
 
