@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.wrapper {
+  width: 500px;
+  text-align: center;
+}
+.btn {
+  font-size: 24px;
+  padding: 5px 30px;
+  cursor: pointer;
+}
+
+.text {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+.text.red {
+  color: red;
+}
