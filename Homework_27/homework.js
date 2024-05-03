@@ -1,9 +1,6 @@
-const linkBtn = document.querySelector('.link');
-const redirectBtn = document.querySelector('.redirect');
-
-class StateManager {
+class Model {
   constructor(initialState = null) {
-    this._state = initialState ?? structuredClone(initialState);
+    this._state = initialState;
   }
   setState(value) {
     this._state = value;
@@ -12,20 +9,69 @@ class StateManager {
     return this._state;
   }
 }
-const state = new StateManager();
 
-const redirectHandler = () => location.assign(state.getState());
-
-const linkInputHandler = () => {
-  state.setState(prompt('Enter link for redirect', 'http://google.com'));
-
-  if (!state.getState()) {
-    redirectBtn.toggleAttribute('disabled');
-    return;
+class PureEventEmmitter {
+  constructor() {
+    this._listeners = {};
   }
+  subscribeMeTo(event, handler) {
+    if (this._listeners[event]) this._listeners[event].push(handler);
+    else this._listeners[event] = [handler];
+  }
+  emitt(event, data) {
+    if (!this._listeners[event]) return;
 
-  redirectBtn.removeAttribute('disabled');
-};
+    this._listeners[event].forEach(callback => callback(data));
+  }
+}
 
-linkBtn.addEventListener('click', linkInputHandler);
-redirectBtn.addEventListener('click', redirectHandler);
+class View extends PureEventEmmitter {
+  constructor() {
+    super();
+    this.linkBtn = document.querySelector('.link');
+    this.redirectBtn = document.querySelector('.redirect');
+
+    this.linkBtn.addEventListener('click', this.linkClick.bind(this));
+    this.redirectBtn.addEventListener('click', this.redirectClick.bind(this));
+  }
+  linkClick(data) {
+    this.emitt('addLink', data);
+  }
+  redirectClick(data) {
+    this.emitt('rediurectTo', data);
+  }
+  enableRedirectBtn() {
+    this.redirectBtn.toggleAttribute('disabled');
+  }
+  disableRedirectBtn() {
+    this.redirectBtn.removeAttribute('disabled');
+  }
+}
+
+class Controller {
+  constructor(model, view) {
+    this._model = model;
+    this._view = view;
+    this._view.subscribeMeTo('addLink', this.linkHandler.bind(this));
+    this._view.subscribeMeTo('rediurectTo', this.redirectHandler.bind(this));
+  }
+  linkHandler() {
+    this._model.setState(
+      prompt('Enter link for redirect', 'http://google.com')
+    );
+
+    if (!this._model.getState()) {
+      this._view.enableRedirectBtn();
+      return;
+    }
+
+    this._view.disableRedirectBtn();
+  }
+  redirectHandler() {
+    location.assign(this._model.getState());
+  }
+}
+
+const model = new Model();
+const view = new View();
+const controller = new Controller(model, view);

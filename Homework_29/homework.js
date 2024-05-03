@@ -7,7 +7,6 @@ const drawTodoItem = val => {
   const deleteBtn = document.createElement('button');
 
   li.classList.add('todo-list__item');
-
   text.classList.add('todo-list__item-text');
   deleteBtn.classList.add('btn', 'btn-danger', 'todo-list__item-btn');
   deleteBtn.setAttribute('data-todoitem', true);
@@ -18,17 +17,19 @@ const drawTodoItem = val => {
   container.appendChild(li);
 };
 
-form.addEventListener('submit', e => {
+const handleAdd = e => {
   e.preventDefault();
-  const formData = new FormData(e.target);
+  const inputTask = new FormData(e.target).get('task');
 
-  drawTodoItem(formData.get('task'));
+  drawTodoItem(inputTask);
 
   form.reset();
-});
-
-container.addEventListener('click', ({ target }) => {
+};
+const handleDelete = ({ target }) => {
   if (target.hasAttribute('data-todoitem')) {
     target.parentElement.remove();
   }
-});
+};
+
+form.addEventListener('submit', handleAdd);
+container.addEventListener('click', handleDelete);

@@ -1,16 +1,16 @@
-class ButtonConstructor {
+class Button {
   constructor(options = {}) {
-    this._attribute = options;
+    this._attributes = options;
     this._btn = null;
     this._initButton();
   }
   _initButton() {
     const btn = document.createElement('button');
 
-    Object.keys(this._attribute).forEach(v => {
+    Object.keys(this._attributes).forEach(v => {
       if (v === 'textContent') {
-        btn.textContent = this._attribute?.textContent ?? 'button';
-      } else btn.setAttribute(v, this._attribute[v]);
+        btn.textContent = this._attributes?.textContent ?? 'button';
+      } else btn.setAttribute(v, this._attributes[v]);
     });
     this._btn = btn;
   }
@@ -25,7 +25,7 @@ const appendButtons = (container = 'body', count = 0) => {
   let innerCount = 0;
 
   while (count !== innerCount) {
-    const btn = new ButtonConstructor({
+    const btn = new Button({
       class: 'btn btn-primary btn-lg',
       textContent: 'button ' + (innerCount + 1),
       'data-number': innerCount + 1,
