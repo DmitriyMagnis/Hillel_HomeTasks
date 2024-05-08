@@ -12,7 +12,7 @@ class MyFormEvents {
   submitForm(e) {
     e.preventDefault();
 
-    const inputs = Array.from(e.target.elements);
+    const inputs = Array.from(e.target.elements).filter(({ value }) => value); // exclude button
     let isAllInputsValid = true;
     inputs.forEach(el => {
       const pattern = el.getAttribute('validator');
@@ -23,9 +23,13 @@ class MyFormEvents {
       //need to prevent updating isAllInputsValid from further validation
       isAllInputsValid = !isAllInputsValid ? isAllInputsValid : isValid;
     });
-    console.log(isAllInputsValid);
+
     if (isAllInputsValid) {
-      console.log(object);
+      const showResultInTable = inputs.reduce(
+        (table, { name, value }) => ({ ...table, [name]: value }),
+        {}
+      );
+      console.log(showResultInTable);
       e.target.reset();
     }
   }
@@ -119,6 +123,7 @@ new MyForm('.wrapper', [
   {
     type: 'input',
     attr: {
+      name: 'Name',
       type: 'text',
       placeHolder: 'Name',
       class: 'form_input-name form-control',
@@ -131,6 +136,7 @@ new MyForm('.wrapper', [
   {
     type: 'textarea',
     attr: {
+      name: 'Message',
       type: 'text',
       placeHolder: 'Message',
       class: 'form_input-area form-control',
@@ -147,6 +153,7 @@ new MyForm('.wrapper', [
   {
     type: 'input',
     attr: {
+      name: 'Phone',
       type: 'tel',
       placeHolder: 'Phone Number',
       class: 'form_input-tel form-control',
@@ -157,6 +164,7 @@ new MyForm('.wrapper', [
   {
     type: 'input',
     attr: {
+      name: 'Email',
       type: 'email',
       placeHolder: 'Email',
       class: 'form_input-email form-control',
