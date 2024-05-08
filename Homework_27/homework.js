@@ -28,11 +28,11 @@ class PureEventEmmitter {
 class View extends PureEventEmmitter {
   constructor() {
     super();
-    this.linkBtn = document.querySelector('.link');
-    this.redirectBtn = document.querySelector('.redirect');
+    this._linkBtn = document.querySelector('.link');
+    this._redirectBtn = document.querySelector('.redirect');
 
-    this.linkBtn.addEventListener('click', this.linkClick.bind(this));
-    this.redirectBtn.addEventListener('click', this.redirectClick.bind(this));
+    this._linkBtn.addEventListener('click', this.linkClick.bind(this));
+    this._redirectBtn.addEventListener('click', this.redirectClick.bind(this));
   }
   linkClick(data) {
     this.emitt('addLink', data);
@@ -41,10 +41,10 @@ class View extends PureEventEmmitter {
     this.emitt('rediurectTo', data);
   }
   enableRedirectBtn() {
-    this.redirectBtn.toggleAttribute('disabled');
+    this._redirectBtn.toggleAttribute('disabled');
   }
   disableRedirectBtn() {
-    this.redirectBtn.removeAttribute('disabled');
+    this._redirectBtn.removeAttribute('disabled');
   }
 }
 
