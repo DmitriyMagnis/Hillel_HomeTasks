@@ -1,102 +1,98 @@
-const validate = (pattern, value) => new RegExp(pattern).test(value);
-class MyFormEvents {
-  handleBlurEvent({ target }) {
-    const pattern = target.getAttribute('validator');
+const _INPUTENUMTYPES = ['input', 'textarea', 'text', 'tel', 'email'];
 
-    if (!pattern) return;
+const createEl = ({ type = 'div', attr, content }) => {
+  const _el = document.createElement(type);
+  if (content) _el.textContent = content;
 
-    const isValidated = validate(pattern, target.value);
-
-    this.handleErrorEvent(isValidated, target);
+  if (attr) {
+    Object.entries(attr).forEach(([key, value]) => {
+      _el.setAttribute(key, value);
+    });
   }
-  handleSubmitForm(e) {
-    e.preventDefault();
 
-    const inputs = Array.from(e.target.elements).filter(
-      ({ nodeName }) => nodeName !== 'BUTTON'
-    ); // exclude button
+  return _el;
+};
 
-    let isAllInputsValid = true;
-    inputs.forEach(formItem => {
-      const pattern = formItem.getAttribute('validator');
-      if (!pattern) return;
+class ValidateHandler {
+  validate(pattern, value) {
+    return new RegExp(pattern).test(value);
+  }
+  fieldValidateHandle(target) {
+    const pattern = target.getAttribute('patterns');
+    const isValid = this.validate(pattern, target.value);
 
-      const isValid = validate(pattern, formItem.value);
-      this.handleErrorEvent(isValid, formItem);
-      if (isAllInputsValid) {
-        isAllInputsValid = isValid;
+    if (!isValid) target.parentNode.classList.add('error');
+    else target.parentNode.classList.remove('error');
+    return isValid;
+  }
+  allValidateAllFields() {
+    let isSubmited = true;
+    this._inputNodes.forEach(item => {
+      const isValidField = this.fieldValidateHandle(item);
+      if (isSubmited) {
+        isSubmited = isValidField;
       }
     });
-
-    if (isAllInputsValid) {
-      const showResultInTable = inputs.reduce(
-        (table, { name, value }) => ({ ...table, [name]: value }),
-        {}
-      );
-      console.log(showResultInTable);
-      e.target.reset();
-    }
-  }
-  handleErrorEvent(isValidated, { parentNode }) {
-    if (!isValidated) {
-      parentNode.classList.add('error');
-      parentNode.setAttribute('data-error-msg', 'Wrong Input');
-    } else {
-      parentNode.classList.remove('error');
-      parentNode.removeAttribute('data-error-msg');
-    }
+    return isSubmited;
   }
 }
-
-class ElementConstructor extends MyFormEvents {
-  _enumsInputTypes = ['input', 'textarea'];
-  createFabricEl({ type = 'div', attr, content, validator }) {
-    const _el = document.createElement(type);
-    if (content) _el.textContent = content;
-
-    if (validator) {
-      _el.setAttribute('validator', validator);
-      _el.addEventListener('blur', this.handleBlurEvent.bind(this));
-    }
-
-    if (type === 'form') {
-      _el.addEventListener('submit', this.handleSubmitForm.bind(this));
-    }
-
-    if (attr) {
-      Object.entries(attr).forEach(([key, value]) => {
-        _el.setAttribute(key, value);
-      });
-    }
-
-    return _el;
-  }
-
-  createWrapper(element) {
-    const wrapper = this.createFabricEl({
-      attr: {
-        class: 'form_input-wraper',
-      },
-    });
-
-    wrapper.insertAdjacentElement('afterbegin', element);
-    return wrapper;
-  }
-}
-
-class MyForm extends ElementConstructor {
+class MyForm extends ValidateHandler {
   constructor(root = 'body', inputsData) {
     super();
     this._root = root;
     this._inputsData = inputsData;
+    this._inputNodes = [];
   }
   init() {
     const container = document.querySelector(this._root);
-    container.insertAdjacentElement('afterbegin', this.createForm());
-    return this;
+    const form = this.createForm();
+    this.setFormInputNodes(form);
+    this.createListeners(form);
+    container.insertAdjacentElement('afterbegin', form);
+  }
+  createFormInput(data) {
+    const item = createEl(data);
+    const wrapper = createEl({ attr: { class: 'form_input-wraper' } });
+    if (data.validator) {
+      //need for css attr() function
+      wrapper.setAttribute('error-message', data.validator.errorMsg);
+      item.setAttribute('patterns', data.validator.patterns);
+    }
+    wrapper.insertAdjacentElement('afterbegin', item);
+    return wrapper;
+  }
+  onBlur(e) {
+    const isValid = this.fieldValidateHandle(e.target);
+    //console.log(isValid);
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    const isSubmited = this.allValidateAllFields();
+    if (isSubmited) {
+      const result = this._inputNodes.reduce(
+        (table, { name, value }) => ({ ...table, [name]: value }),
+        {}
+      );
+      console.dir({ result });
+    }
+  }
+  createListeners(form) {
+    this.getFormInputNodes().forEach(item => {
+      item.addEventListener('blur', this.onBlur.bind(this));
+    });
+    form.addEventListener('submit', this.onSubmit.bind(this));
+  }
+  setFormInputNodes(form) {
+    const nodesToArray = Array.from(form.elements).filter(
+      ({ nodeName }) => nodeName !== 'BUTTON'
+    );
+    this._inputNodes = nodesToArray;
+  }
+  getFormInputNodes() {
+    return this._inputNodes;
   }
   createForm() {
-    const form = this.createFabricEl({
+    const form = createEl({
       type: 'form',
       attr: {
         class: 'form',
@@ -104,12 +100,11 @@ class MyForm extends ElementConstructor {
     });
     const fragment = new DocumentFragment();
     this._inputsData.forEach(data => {
-      const shoultWrapInDiv = this._enumsInputTypes.includes(data.type);
-      const el = !shoultWrapInDiv
-        ? this.createFabricEl(data)
-        : this.createWrapper(this.createFabricEl(data));
+      const formItem = _INPUTENUMTYPES.includes(data.type)
+        ? this.createFormInput(data)
+        : createEl(data);
 
-      fragment.append(el);
+      fragment.append(formItem);
     });
 
     form.appendChild(fragment);
@@ -132,9 +127,10 @@ const a = new MyForm('.wrapper', [
       class: 'form_input-name form-control',
       tabIndex: '1',
     },
-    //where to store patterns? or how to make relations beetween them when submiting?
-    // validator: val => /^\w{1,15}$/.test(val),
-    validator: '^[a-zA-Z0-9_.-\\s]{5,30}$',
+    validator: {
+      patterns: '^[a-zA-Z0-9_.-\\s]{5,30}$',
+      errorMsg: 'Invalid Name',
+    },
   },
   {
     type: 'textarea',
@@ -146,7 +142,10 @@ const a = new MyForm('.wrapper', [
       tabIndex: '2',
       rows: '4',
     },
-    validator: '^[a-zA-Z0-9_.-\\s]{1,50}$',
+    validator: {
+      patterns: '^[a-zA-Z0-9_.-\\s]{1,50}$',
+      errorMsg: 'Invalid input length',
+    },
   },
   {
     type: 'h5',
@@ -162,7 +161,10 @@ const a = new MyForm('.wrapper', [
       class: 'form_input-tel form-control',
       tabIndex: '3',
     },
-    validator: '(?:([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4}))',
+    validator: {
+      patterns: '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$',
+      errorMsg: 'Invalid phone number',
+    },
   },
   {
     type: 'input',
@@ -173,7 +175,10 @@ const a = new MyForm('.wrapper', [
       class: 'form_input-email form-control',
       tabIndex: '4',
     },
-    validator: '^\\w{1,30}@\\w{2,20}(.[\\w{2,20}])?.[a-zA-Z]{2,6}$',
+    validator: {
+      patterns: '^\\w{1,30}@\\w{2,20}.[a-zA-Z]{2,6}$',
+      errorMsg: 'Invalid error',
+    },
   },
   {
     type: 'button',
@@ -185,4 +190,3 @@ const a = new MyForm('.wrapper', [
     },
   },
 ]).init();
-console.log(a);

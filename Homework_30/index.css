@@ -32,7 +32,7 @@ body {
   }
   .form_input-wraper.error::after {
     position: absolute;
-    content: attr(data-error-msg);
+    content: attr(error-message);
     color: crimson;
     font-size: 13px;
     bottom: -17px;
