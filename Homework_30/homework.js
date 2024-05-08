@@ -13,11 +13,11 @@ const createEl = ({ type = 'div', attr, content }) => {
   return _el;
 };
 
-class ValidateHandler {
+class ValidationHandler {
   validate(pattern, value) {
     return new RegExp(pattern).test(value);
   }
-  fieldValidateHandle(target) {
+  validateSingleField(target) {
     const pattern = target.getAttribute('patterns');
     const isValid = this.validate(pattern, target.value);
 
@@ -25,10 +25,10 @@ class ValidateHandler {
     else target.parentNode.classList.remove('error');
     return isValid;
   }
-  allValidateAllFields() {
+  validateAllFields() {
     let isSubmited = true;
     this._inputNodes.forEach(item => {
-      const isValidField = this.fieldValidateHandle(item);
+      const isValidField = this.validateSingleField(item);
       if (isSubmited) {
         isSubmited = isValidField;
       }
@@ -36,7 +36,7 @@ class ValidateHandler {
     return isSubmited;
   }
 }
-class MyForm extends ValidateHandler {
+class MyForm extends ValidationHandler {
   constructor(root = 'body', inputsData) {
     super();
     this._root = root;
@@ -62,12 +62,12 @@ class MyForm extends ValidateHandler {
     return wrapper;
   }
   onBlur(e) {
-    const isValid = this.fieldValidateHandle(e.target);
+    const isValid = this.validateSingleField(e.target);
     //console.log(isValid);
   }
   onSubmit(e) {
     e.preventDefault();
-    const isSubmited = this.allValidateAllFields();
+    const isSubmited = this.validateAllFields();
     if (isSubmited) {
       const result = this._inputNodes.reduce(
         (table, { name, value }) => ({ ...table, [name]: value }),
