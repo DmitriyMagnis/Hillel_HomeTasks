@@ -1,6 +1,6 @@
 const validate = (pattern, value) => new RegExp(pattern).test(value);
 class MyFormEvents {
-  onBlurEvent({ target }) {
+  handleBlurEvent({ target }) {
     const pattern = target.getAttribute('validator');
 
     if (!pattern) return;
@@ -9,19 +9,23 @@ class MyFormEvents {
 
     this.handleErrorEvent(isValidated, target);
   }
-  submitForm(e) {
+  handleSubmitForm(e) {
     e.preventDefault();
 
-    const inputs = Array.from(e.target.elements).filter(({ value }) => value); // exclude button
+    const inputs = Array.from(e.target.elements).filter(
+      ({ nodeName }) => nodeName !== 'BUTTON'
+    ); // exclude button
+
     let isAllInputsValid = true;
-    inputs.forEach(el => {
-      const pattern = el.getAttribute('validator');
+    inputs.forEach(formItem => {
+      const pattern = formItem.getAttribute('validator');
       if (!pattern) return;
 
-      const isValid = validate(pattern, el.value);
-      this.handleErrorEvent(isValid, el);
-      //need to prevent updating isAllInputsValid from further validation
-      isAllInputsValid = !isAllInputsValid ? isAllInputsValid : isValid;
+      const isValid = validate(pattern, formItem.value);
+      this.handleErrorEvent(isValid, formItem);
+      if (isAllInputsValid) {
+        isAllInputsValid = isValid;
+      }
     });
 
     if (isAllInputsValid) {
@@ -52,11 +56,11 @@ class ElementConstructor extends MyFormEvents {
 
     if (validator) {
       _el.setAttribute('validator', validator);
-      _el.addEventListener('blur', this.onBlurEvent.bind(this));
+      _el.addEventListener('blur', this.handleBlurEvent.bind(this));
     }
 
     if (type === 'form') {
-      _el.addEventListener('submit', this.submitForm.bind(this));
+      _el.addEventListener('submit', this.handleSubmitForm.bind(this));
     }
 
     if (attr) {
@@ -65,22 +69,18 @@ class ElementConstructor extends MyFormEvents {
       });
     }
 
-    const isWithWrapper = this._enumsInputTypes.includes(type)
-      ? this.createWrapper(_el)
-      : _el;
-
-    return isWithWrapper;
+    return _el;
   }
 
   createWrapper(element) {
-    const el = this.createFabricEl({
+    const wrapper = this.createFabricEl({
       attr: {
         class: 'form_input-wraper',
       },
     });
 
-    el.insertAdjacentElement('afterbegin', element);
-    return el;
+    wrapper.insertAdjacentElement('afterbegin', element);
+    return wrapper;
   }
 }
 
@@ -93,6 +93,7 @@ class MyForm extends ElementConstructor {
   init() {
     const container = document.querySelector(this._root);
     container.insertAdjacentElement('afterbegin', this.createForm());
+    return this;
   }
   createForm() {
     const form = this.createFabricEl({
@@ -102,9 +103,11 @@ class MyForm extends ElementConstructor {
       },
     });
     const fragment = new DocumentFragment();
-
     this._inputsData.forEach(data => {
-      const el = this.createFabricEl(data);
+      const shoultWrapInDiv = this._enumsInputTypes.includes(data.type);
+      const el = !shoultWrapInDiv
+        ? this.createFabricEl(data)
+        : this.createWrapper(this.createFabricEl(data));
 
       fragment.append(el);
     });
@@ -114,7 +117,7 @@ class MyForm extends ElementConstructor {
     return form;
   }
 }
-new MyForm('.wrapper', [
+const a = new MyForm('.wrapper', [
   {
     type: 'h3',
     content: 'We would like to help you',
@@ -182,3 +185,4 @@ new MyForm('.wrapper', [
     },
   },
 ]).init();
+console.log(a);
