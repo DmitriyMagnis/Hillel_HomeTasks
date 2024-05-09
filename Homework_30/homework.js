@@ -1,3 +1,4 @@
+'use strict';
 const _INPUTENUMTYPES = ['input', 'textarea', 'text', 'tel', 'email'];
 
 const createEl = ({ type = 'div', attr, content }) => {
@@ -14,20 +15,20 @@ const createEl = ({ type = 'div', attr, content }) => {
 };
 
 class ValidationHandler {
-  validate(pattern, value) {
+  static validate(pattern, value) {
     return new RegExp(pattern).test(value);
   }
-  validateSingleField(target) {
-    const pattern = target.getAttribute('patterns');
-    const isValid = this.validate(pattern, target.value);
+  static validateSingleField(field) {
+    const pattern = field.getAttribute('patterns');
+    const isValid = this.validate(pattern, field.value);
 
-    if (!isValid) target.parentNode.classList.add('error');
-    else target.parentNode.classList.remove('error');
+    if (!isValid) field.parentNode.classList.add('error');
+    else field.parentNode.classList.remove('error');
     return isValid;
   }
-  validateAllFields() {
+  static validateAllFields(fields) {
     let isSubmited = true;
-    this._inputNodes.forEach(item => {
+    fields.forEach(item => {
       const isValidField = this.validateSingleField(item);
       if (isSubmited) {
         isSubmited = isValidField;
@@ -36,9 +37,8 @@ class ValidationHandler {
     return isSubmited;
   }
 }
-class MyForm extends ValidationHandler {
+class MyForm {
   constructor(root = 'body', inputsData) {
-    super();
     this._root = root;
     this._inputsData = inputsData;
     this._inputNodes = [];
@@ -62,12 +62,12 @@ class MyForm extends ValidationHandler {
     return wrapper;
   }
   onBlur(e) {
-    const isValid = this.validateSingleField(e.target);
+    const isValid = ValidationHandler.validateSingleField(e.target);
     //console.log(isValid);
   }
   onSubmit(e) {
     e.preventDefault();
-    const isSubmited = this.validateAllFields();
+    const isSubmited = ValidationHandler.validateAllFields(this._inputNodes);
     if (isSubmited) {
       const result = this._inputNodes.reduce(
         (table, { name, value }) => ({ ...table, [name]: value }),
