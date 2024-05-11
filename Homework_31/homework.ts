@@ -32,9 +32,9 @@ class Slider {
     this.setTrack();
     this.setTrackWidth();
     this.setSliderItems();
-    this.initArrowBtns();
-    this.initDots();
-    this.addEvents();
+    this.setArrowBtns();
+    this.setDots();
+    this.setEvents();
 
     console.log(this);
   }
@@ -52,7 +52,7 @@ class Slider {
     console.log(sliderItems);
     this.items = Array.from(sliderItems);
   }
-  initArrowBtns() {
+  setArrowBtns() {
     const prev = document.querySelector('.slider__arrows-prev');
     const next = document.querySelector('.slider__arrows-next');
     if (this.items.length <= 1) {
@@ -64,7 +64,7 @@ class Slider {
     this.nextArrow = next as HTMLButtonElement;
     this.hadnleArrows();
   }
-  initDots() {
+  setDots() {
     if (!this.options.dots || this.items.length <= 1) return;
 
     const dotsContainer =
@@ -86,7 +86,7 @@ class Slider {
     dotsContainer.appendChild(dotItems);
     this.dotContainer = dotsContainer;
   }
-  addEvents() {
+  setEvents() {
     if (!this.nextArrow || !this.prevArrow) return;
     this.nextArrow.addEventListener('click', this.next.bind(this));
     this.prevArrow.addEventListener('click', this.prev.bind(this));
