@@ -62,7 +62,7 @@ class Slider {
     }
     this.prevArrow = prev as HTMLButtonElement;
     this.nextArrow = next as HTMLButtonElement;
-    this.hadnleArrows();
+    this.handleArrows();
   }
   setDots() {
     if (!this.options.dots || this.items.length <= 1) return;
@@ -107,10 +107,10 @@ class Slider {
     this.track.style.cssText = `transform: translate(-${
       this.currentPosition * this.trackWidth + 5 + 'px'
     });`;
-    this.hadnleArrows();
-    this.handleDots();
+    this.handleArrows();
+    this.handleActiveDots();
   }
-  handleDots() {
+  handleActiveDots() {
     if (!this.dotContainer) return;
     Array.from(this.dotContainer.children).forEach(dotItem => {
       const elementIdx = Number(dotItem.getAttribute('data-index'));
@@ -127,8 +127,8 @@ class Slider {
     this.track.style.cssText = `transform: translate(-${
       this.currentPosition * this.trackWidth + 5 + 'px'
     });`;
-    this.hadnleArrows();
-    this.handleDots();
+    this.handleArrows();
+    this.handleActiveDots();
   }
 
   prev() {
@@ -138,10 +138,10 @@ class Slider {
     this.track.style.cssText = `transform: translate(-${
       this.currentPosition * this.trackWidth + 5 + 'px'
     });`;
-    this.hadnleArrows();
-    this.handleDots();
+    this.handleArrows();
+    this.handleActiveDots();
   }
-  hadnleArrows() {
+  handleArrows() {
     if (this.currentPosition === 0) {
       this.prevArrow?.classList.add('disabled');
       this.nextArrow?.classList.remove('disabled');

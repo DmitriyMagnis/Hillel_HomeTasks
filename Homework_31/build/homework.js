@@ -15,9 +15,9 @@ class Slider {
         this.setTrack();
         this.setTrackWidth();
         this.setSliderItems();
-        this.initArrowBtns();
-        this.initDots();
-        this.addEvents();
+        this.setArrowBtns();
+        this.setDots();
+        this.setEvents();
         console.log(this);
     }
     setTrack() {
@@ -34,7 +34,7 @@ class Slider {
         console.log(sliderItems);
         this.items = Array.from(sliderItems);
     }
-    initArrowBtns() {
+    setArrowBtns() {
         const prev = document.querySelector('.slider__arrows-prev');
         const next = document.querySelector('.slider__arrows-next');
         if (this.items.length <= 1) {
@@ -44,9 +44,9 @@ class Slider {
         }
         this.prevArrow = prev;
         this.nextArrow = next;
-        this.hadnleArrows();
+        this.handleArrows();
     }
-    initDots() {
+    setDots() {
         if (!this.options.dots || this.items.length <= 1)
             return;
         const dotsContainer = document.querySelector('.slider__dots');
@@ -65,7 +65,7 @@ class Slider {
         dotsContainer.appendChild(dotItems);
         this.dotContainer = dotsContainer;
     }
-    addEvents() {
+    setEvents() {
         if (!this.nextArrow || !this.prevArrow)
             return;
         this.nextArrow.addEventListener('click', this.next.bind(this));
@@ -85,10 +85,10 @@ class Slider {
             return;
         this.currentPosition = pos;
         this.track.style.cssText = `transform: translate(-${this.currentPosition * this.trackWidth + 5 + 'px'});`;
-        this.hadnleArrows();
-        this.handleDots();
+        this.handleArrows();
+        this.handleActiveDots();
     }
-    handleDots() {
+    handleActiveDots() {
         if (!this.dotContainer)
             return;
         Array.from(this.dotContainer.children).forEach(dotItem => {
@@ -105,18 +105,18 @@ class Slider {
             return;
         this.currentPosition += 1;
         this.track.style.cssText = `transform: translate(-${this.currentPosition * this.trackWidth + 5 + 'px'});`;
-        this.hadnleArrows();
-        this.handleDots();
+        this.handleArrows();
+        this.handleActiveDots();
     }
     prev() {
         if (!this.track || !this.trackWidth)
             return;
         this.currentPosition -= 1;
         this.track.style.cssText = `transform: translate(-${this.currentPosition * this.trackWidth + 5 + 'px'});`;
-        this.hadnleArrows();
-        this.handleDots();
+        this.handleArrows();
+        this.handleActiveDots();
     }
-    hadnleArrows() {
+    handleArrows() {
         var _a, _b, _c, _d, _e, _f;
         if (this.currentPosition === 0) {
             (_a = this.prevArrow) === null || _a === void 0 ? void 0 : _a.classList.add('disabled');
