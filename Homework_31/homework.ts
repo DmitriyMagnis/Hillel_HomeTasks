@@ -6,6 +6,11 @@ interface ISliderOptions {
 
 type Nullable<T> = T | null;
 
+const defaultState: ISliderOptions = {
+  dots: true,
+  wrapper: '.slider',
+};
+
 class Slider {
   private options: ISliderOptions;
   private trackWidth: Nullable<number>;
@@ -17,7 +22,7 @@ class Slider {
   private dotContainer: Nullable<HTMLElement>;
 
   constructor(options?: ISliderOptions) {
-    this.options = { dots: true, wrapper: '.slider', ...options };
+    this.options = options ? { ...defaultState, ...options } : defaultState;
 
     this.track = null;
     this.trackWidth = null;
@@ -155,11 +160,11 @@ class Slider {
   }
 }
 
-const sliderr2 = new Slider({ wrapper: '.slider', dots: true });
+new Slider({ wrapper: '.slider', dots: true });
 
 interface IELEMENTConfig {
   type?: keyof HTMLElementTagNameMap;
-  attr: { [s: string]: string };
+  attr?: { [s: string]: string };
   content?: string;
 }
 

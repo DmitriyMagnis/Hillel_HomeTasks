@@ -1,7 +1,11 @@
 'use strict';
+const defaultState = {
+    dots: true,
+    wrapper: '.slider',
+};
 class Slider {
     constructor(options) {
-        this.options = Object.assign({ dots: true, wrapper: '.slider' }, options);
+        this.options = options ? Object.assign(Object.assign({}, defaultState), options) : defaultState;
         this.track = null;
         this.trackWidth = null;
         this.items = [];
@@ -132,7 +136,7 @@ class Slider {
         }
     }
 }
-const sliderr2 = new Slider({ wrapper: '.slider', dots: true });
+new Slider({ wrapper: '.slider', dots: true });
 function createEl({ type = 'div', attr, content }) {
     const _el = document.createElement(type);
     if (content)
