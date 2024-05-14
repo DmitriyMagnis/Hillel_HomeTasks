@@ -1,4 +1,12 @@
 type Nullable<T> = T | null;
+enum STATUSES {
+  SUBMITED = 'Submited',
+  IN_PROGRES = 'In Progres',
+}
+interface DBRecord {
+  value: string;
+  status: STATUSES;
+}
 
 class Todo {
   private form: Nullable<HTMLFormElement>;
@@ -12,40 +20,64 @@ class Todo {
     this.init();
     this.initEvents();
     this.db.subscribeStorage(this.handleStorageEvent.bind(this));
-    console.log(this.todoListContainer?.childNodes);
   }
   private init() {
-    this.db.getAllRecords().forEach(([key, value]) => {
-      this.drawItem(value, key);
+    this.db.getAllRecords().forEach(([key, data]) => {
+      this.drawItem(data, key);
     });
   }
   private initEvents() {
     this.form?.addEventListener('submit', this.add.bind(this));
-    this.todoListContainer?.addEventListener('click', this.delete.bind(this));
+
+    this.todoListContainer?.addEventListener(
+      'click',
+      this.handleTodoItemEvents.bind(this)
+    );
   }
-  drawItem(textValue: string, id: string) {
+  drawItem(data: DBRecord, id: string) {
     if (!this.todoListContainer) return;
     const li = document.createElement('li');
-    const text = document.createElement('p');
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
     const deleteBtn = document.createElement('button');
 
-    li.classList.add('todo-list__item');
-    text.classList.add('todo-list__item-text');
-    deleteBtn.classList.add('btn', 'btn-danger', 'todo-list__item-btn');
+    checkbox.classList.add('form-check-input');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.setAttribute('id', id);
+    checkbox.checked = data.status === STATUSES.SUBMITED;
+    label.classList.add('todo-list__item-text');
+    label.setAttribute('for', id);
+    label.textContent = data.value;
     li.setAttribute('data-todo-id', id);
+    li.classList.add('todo-list__item');
+
     deleteBtn.textContent = 'delete';
-    text.textContent = textValue;
-    li.appendChild(text);
+    deleteBtn.classList.add('btn', 'btn-danger', 'todo-list__item-btn');
+
+    li.appendChild(checkbox);
+    li.appendChild(label);
     li.appendChild(deleteBtn);
     this.todoListContainer.appendChild(li);
   }
-  delete(e: Event) {
+  handleTodoItemEvents(e: Event) {
     const target = e.target as Element;
     if (!target?.parentElement) return;
     if (target.classList.contains('todo-list__item-btn')) {
       target.parentElement.remove();
       this.db.delete(
         target.parentElement.getAttribute('data-todo-id') as string
+      );
+    }
+    if (target.classList.contains('form-check-input')) {
+      // this.db.update(id, key, value);
+      const id = target.parentElement.getAttribute('data-todo-id');
+      target.parentElement.classList.toggle('submited');
+      this.db.update(
+        String(id),
+        'status',
+        (target as HTMLInputElement).checked
+          ? STATUSES.SUBMITED
+          : STATUSES.IN_PROGRES
       );
     }
   }
@@ -55,14 +87,15 @@ class Todo {
     const inputTask = new FormData(target).get('task');
     const uniqueId = uuid();
 
-    this.db.save(uniqueId, String(inputTask));
-    this.drawItem(String(inputTask), uniqueId);
+    const newRecord = { status: STATUSES.IN_PROGRES, value: String(inputTask) };
+    this.db.save(uniqueId, newRecord);
+    this.drawItem(newRecord, uniqueId);
 
     this.form?.reset();
   }
   handleStorageEvent(e: StorageEvent) {
     if (e.newValue) {
-      this.drawItem(String(e.newValue), String(e.key));
+      this.drawItem(JSON.parse(e.newValue), String(e.key));
     }
     if (e.oldValue && this.todoListContainer) {
       const todoItems = Array.from(this.todoListContainer?.children);
@@ -79,17 +112,28 @@ class DB {
   constructor(instance: Storage) {
     this.instance = instance;
   }
-  save(key: string, value: string) {
-    this.instance.setItem(key, value);
+  save(key: string, record: DBRecord) {
+    this.instance.setItem(key, JSON.stringify(record));
   }
-  get(key: string) {
-    return this.instance.getItem(key);
+  get(key: string): Nullable<DBRecord> {
+    const value = this.instance.getItem(key);
+    if (!value) return null;
+    return JSON.parse(value);
   }
-  getAllRecords(): [string, string][] {
-    return Object.entries(this.instance);
+  getAllRecords(): [string, DBRecord][] {
+    return Object.entries(this.instance).map(([key, record]) => [
+      key,
+      JSON.parse(record),
+    ]);
   }
   delete(key: string) {
     this.instance.removeItem(key);
+  }
+  update(id: string, key: string, value: string) {
+    const oldRecord = this.instance.getItem(id);
+    if (!oldRecord) return;
+    const newRecord: DBRecord = { ...JSON.parse(oldRecord), [key]: value };
+    this.save(id, newRecord);
   }
   clear() {
     this.instance.clear();

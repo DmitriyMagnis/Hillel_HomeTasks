@@ -37,7 +37,7 @@ body {
   margin-left: auto;
 }
 .todo-list__item::before {
-  content: 'Task#' attr(data-todo-id);
+  /* content: 'Task#' attr(data-todo-id); */
   /* content: 'Task ' counter(todo) ': '; */
   /* counter-increment: todo; */
   font-weight: bold;

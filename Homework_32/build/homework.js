@@ -1,4 +1,9 @@
 "use strict";
+var STATUSES;
+(function (STATUSES) {
+    STATUSES["SUBMITED"] = "Submited";
+    STATUSES["IN_PROGRES"] = "In Progres";
+})(STATUSES || (STATUSES = {}));
 class Todo {
     form;
     todoListContainer;
@@ -11,34 +16,40 @@ class Todo {
         this.init();
         this.initEvents();
         this.db.subscribeStorage(this.handleStorageEvent.bind(this));
-        console.log(this.todoListContainer?.childNodes);
     }
     init() {
-        this.db.getAllRecords().forEach(([key, value]) => {
-            this.drawItem(value, key);
+        this.db.getAllRecords().forEach(([key, data]) => {
+            this.drawItem(data, key);
         });
     }
     initEvents() {
         this.form?.addEventListener('submit', this.add.bind(this));
-        this.todoListContainer?.addEventListener('click', this.delete.bind(this));
+        this.todoListContainer?.addEventListener('click', this.handleTodoItemEvents.bind(this));
     }
-    drawItem(textValue, id) {
+    drawItem(data, id) {
         if (!this.todoListContainer)
             return;
         const li = document.createElement('li');
-        const text = document.createElement('p');
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
         const deleteBtn = document.createElement('button');
-        li.classList.add('todo-list__item');
-        text.classList.add('todo-list__item-text');
-        deleteBtn.classList.add('btn', 'btn-danger', 'todo-list__item-btn');
+        checkbox.classList.add('form-check-input');
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('id', id);
+        checkbox.checked = data.status === STATUSES.SUBMITED;
+        label.classList.add('todo-list__item-text');
+        label.setAttribute('for', id);
+        label.textContent = data.value;
         li.setAttribute('data-todo-id', id);
+        li.classList.add('todo-list__item');
         deleteBtn.textContent = 'delete';
-        text.textContent = textValue;
-        li.appendChild(text);
+        deleteBtn.classList.add('btn', 'btn-danger', 'todo-list__item-btn');
+        li.appendChild(checkbox);
+        li.appendChild(label);
         li.appendChild(deleteBtn);
         this.todoListContainer.appendChild(li);
     }
-    delete(e) {
+    handleTodoItemEvents(e) {
         const target = e.target;
         if (!target?.parentElement)
             return;
@@ -46,19 +57,28 @@ class Todo {
             target.parentElement.remove();
             this.db.delete(target.parentElement.getAttribute('data-todo-id'));
         }
+        if (target.classList.contains('form-check-input')) {
+            // this.db.update(id, key, value);
+            const id = target.parentElement.getAttribute('data-todo-id');
+            target.parentElement.classList.toggle('submited');
+            this.db.update(String(id), 'status', target.checked
+                ? STATUSES.SUBMITED
+                : STATUSES.IN_PROGRES);
+        }
     }
     add(e) {
         const target = e.target;
         e.preventDefault();
         const inputTask = new FormData(target).get('task');
         const uniqueId = uuid();
-        this.db.save(uniqueId, String(inputTask));
-        this.drawItem(String(inputTask), uniqueId);
+        const newRecord = { status: STATUSES.IN_PROGRES, value: String(inputTask) };
+        this.db.save(uniqueId, newRecord);
+        this.drawItem(newRecord, uniqueId);
         this.form?.reset();
     }
     handleStorageEvent(e) {
         if (e.newValue) {
-            this.drawItem(String(e.newValue), String(e.key));
+            this.drawItem(JSON.parse(e.newValue), String(e.key));
         }
         if (e.oldValue && this.todoListContainer) {
             const todoItems = Array.from(this.todoListContainer?.children);
@@ -72,17 +92,31 @@ class DB {
     constructor(instance) {
         this.instance = instance;
     }
-    save(key, value) {
-        this.instance.setItem(key, value);
+    save(key, record) {
+        // const newValue = { status: STATUSES.IN_PROGRES, value };
+        this.instance.setItem(key, JSON.stringify(record));
     }
     get(key) {
-        return this.instance.getItem(key);
+        const value = this.instance.getItem(key);
+        if (!value)
+            return null;
+        return JSON.parse(value);
     }
     getAllRecords() {
-        return Object.entries(this.instance);
+        return Object.entries(this.instance).map(([key, record]) => [
+            key,
+            JSON.parse(record),
+        ]);
     }
     delete(key) {
         this.instance.removeItem(key);
+    }
+    update(id, key, value) {
+        const oldRecord = this.instance.getItem(id);
+        if (!oldRecord)
+            return;
+        const newRecord = { ...JSON.parse(oldRecord), [key]: value };
+        this.save(id, newRecord);
     }
     clear() {
         this.instance.clear();
