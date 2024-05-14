@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.header {
+  margin-bottom: 30px;
+}
+.todo-list {
+  counter-reset: todo;
+}
+.todo-list__item {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  text-wrap: nowrap;
+}
+.todo-list__item:not(:last-child) {
+  margin-bottom: 10px;
+}
+.todo-list__item-text {
+  font-size: 22px;
+  margin-bottom: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.todo-list__item-btn {
+  margin-left: auto;
+}
+.todo-list__item::before {
+  content: 'Task#' attr(data-todo-id);
+  /* content: 'Task ' counter(todo) ': '; */
+  /* counter-increment: todo; */
+  font-weight: bold;
+  font-size: 22px;
+}
