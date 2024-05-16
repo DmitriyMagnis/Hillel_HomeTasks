@@ -11,8 +11,8 @@ interface DBRecord {
 class Todo {
   private form: Nullable<HTMLFormElement>;
   private todoListContainer: Nullable<HTMLDivElement>;
-  private db: DB;
-  constructor(db: DB) {
+  private db: DBStorageManager;
+  constructor(db: DBStorageManager) {
     this.form = document.querySelector<HTMLFormElement>('.form');
     this.todoListContainer =
       document.querySelector<HTMLDivElement>('.todo-list');
@@ -107,7 +107,7 @@ class Todo {
   }
 }
 
-class DB {
+class DBStorageManager {
   private instance: Storage;
   constructor(instance: Storage) {
     this.instance = instance;
@@ -143,7 +143,7 @@ class DB {
   }
 }
 
-const db = new DB(localStorage);
+const db = new DBStorageManager(localStorage);
 
 new Todo(db);
 
