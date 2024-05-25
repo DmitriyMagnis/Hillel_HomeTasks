@@ -45,9 +45,7 @@ class Timer {
 
 form?.addEventListener('submit', (e: SubmitEvent) => {
   e.preventDefault();
-  const formData = new FormData(e.target as HTMLFormElement) as Iterable<
-    [TimeKeys, TimeValue]
-  >;
+  const formData = new FormData(e.target as HTMLFormElement);
   const timeMap = Object.fromEntries(formData) as TimeMap;
   const el = createEl({ type: 'li' }) as HTMLLIElement;
   const btn = createEl({
