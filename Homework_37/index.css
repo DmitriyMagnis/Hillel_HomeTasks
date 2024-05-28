@@ -27,6 +27,10 @@ p {
   gap: 20px;
   margin-bottom: 20px;
 }
+.weather {
+  min-width: 500px;
+  border: 1px solid red;
+}
 /* .header {
   margin-bottom: 30px;
 }
