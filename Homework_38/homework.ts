@@ -163,8 +163,8 @@ class Weather extends View {
   #API_KEY: string = '33e6b457abb9ed010bd7c6e30e06a810';
   #API_URL: string = 'https://api.openweathermap.org/data/2.5/weather?';
   #ICON_URL: string = 'https://openweathermap.org/img/wn/';
-  config: IWeatherConfig;
-  abortController: AbortController | null;
+  public config: IWeatherConfig;
+  private abortController: AbortController | null;
   private _isLoading: boolean = false;
   constructor(config?: IWeatherConfig) {
     super();
