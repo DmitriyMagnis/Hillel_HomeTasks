@@ -35,15 +35,42 @@ p {
     justify-self: center;
     align-self: center;
   }
-  .weather__icon {
-    /* justify-self: center; */
+  .weather__date,
+  .weather__place {
+    font-size: 26px;
+    font-weight: 500;
   }
+
   .weather__refresh {
     font-size: 40px;
     cursor: pointer;
   }
   .weather__refresh.active {
     animation: myrotate 2s infinite;
+  }
+}
+.search {
+  position: absolute;
+  width: 300px;
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -50%);
+  font-size: 25px;
+  padding: 3px 5px;
+}
+.error {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  right: 0;
+  top: 0;
+  /* transform: translateX(-100%); */
+  > .error__item {
+    background-color: red;
+    color: #fff;
+    font-size: 24px;
+    padding: 10px;
   }
 }
 @keyframes myrotate {

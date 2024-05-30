@@ -11,7 +11,7 @@ export interface IWeatherParams {
   temp: number;
 }
 export interface ICoords {
-  long: number;
+  lon: number;
   lat: number;
 }
 
@@ -40,11 +40,18 @@ export interface IWeatherState {
   iconDesrtiption: string;
   windSpeed: number;
   humidity: number;
+  name: string;
 }
 
 export interface IWeatherConfig {
   units: string;
   lang?: string;
-  coord?: ICoords;
-  country: string;
+  coord?: ICoords | null;
+  q?: string;
 }
+
+export interface IApiError {
+  cod: string;
+  message: string;
+}
+export type FUNC<T> = (...args: any[]) => T;
