@@ -208,6 +208,7 @@ class Weather extends View {
             }
             this.setLoader(true);
             this.abortController = new AbortController();
+            // await wait(1000);
             const response = await fetch(this.makeUrl(stateConfig), {
                 signal: this.abortController.signal,
             });
