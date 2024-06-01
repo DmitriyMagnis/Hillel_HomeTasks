@@ -1,12 +1,14 @@
 import rollupTypescript from '@rollup/plugin-typescript';
 import bs from 'browser-sync';
-import { dest, parallel, series, src, watch } from 'gulp';
-import clean from 'gulp-clean';
+import { deleteAsync } from 'del';
+import { dest, series, src, watch } from 'gulp';
+import autoprefixer from 'gulp-autoprefixer';
 import concat from 'gulp-concat';
 import imagemin, { mozjpeg, optipng } from 'gulp-imagemin';
 import gulpSass from 'gulp-sass';
 import sourcemaps from 'gulp-sourcemaps';
 import ssi from 'gulp-ssi';
+import uglify from 'gulp-uglify';
 import * as rollup from 'rollup';
 import dartSass from 'sass';
 
@@ -20,17 +22,12 @@ const BUILD_FOLDER = './build/';
 const SOURCE_MAPS = 'map/';
 
 const html = () => {
-  return src(`${APP_FOLDER}*.html`)
+  return src(`${APP_FOLDER}**.html`)
     .pipe(ssi())
-    .pipe(dest(`${BUILD_FOLDER}`))
-    .pipe(browserSync.stream());
+    .pipe(dest(`${BUILD_FOLDER}`));
 };
-const cleanBuildFolder = () => {
-  return src(
-    [`${BUILD_FOLDER}*.js`, `${BUILD_FOLDER}**.css`, `${BUILD_FOLDER}**.html`],
-    { read: false }
-  ).pipe(clean());
-};
+
+const clean = series(() => deleteAsync([BUILD_FOLDER]));
 
 const sass = gulpSass(dartSass);
 
@@ -42,13 +39,13 @@ const styles = () => {
         outputStyle: 'compressed',
       }).on('error', sass.logError)
     )
+    .pipe(autoprefixer())
     .pipe(concat('styles.min.css'))
     .pipe(sourcemaps.write(SOURCE_MAPS))
-    .pipe(dest(BUILD_FOLDER))
-    .pipe(browserSync.stream());
+    .pipe(dest(BUILD_FOLDER));
 };
 
-const imagesOptimisation = () => {
+const images = () => {
   return src(`${IMAGES_FOLDER}**.{jpg,jpeg,png,svg}`, { encoding: false })
     .pipe(
       imagemin(
@@ -62,43 +59,49 @@ const imagesOptimisation = () => {
     .pipe(dest(BUILD_IMAGES_FOLDER));
 };
 
-const connectServer = () => {
+const typescript = async () => {
+  const bundle = await rollup.rollup({
+    input: `${APP_FOLDER}index.ts`,
+    plugins: [rollupTypescript()],
+  });
+
+  await bundle
+    .write({
+      file: `${BUILD_FOLDER}main.js`,
+      format: 'es',
+      name: 'main',
+      sourcemap: true,
+    })
+    //rollup preventing BrowserSyncEvent resolving in sequence...
+    .then(() => {
+      browserSync.reload();
+    });
+};
+
+const optimiseJs = () => {
+  return src(`${BUILD_FOLDER}**.js`).pipe(uglify()).pipe(dest(BUILD_FOLDER));
+};
+
+const watchers = () => {
   browserSync.init({
     server: {
       baseDir: BUILD_FOLDER,
     },
-    open: true,
+    open: 'local',
+    browser: ['firefox', 'chrome'],
+    codeSync: false,
   });
+  watch(`${APP_FOLDER}**.html`, html).on('change', browserSync.reload);
+  watch(`${IMAGES_FOLDER}**.{jpg,jpeg,png,svg}`, images).on(
+    'change',
+    browserSync.reload
+  );
+  watch(`${SCCS_FOLDER}**.scss`, styles).on('change', browserSync.reload);
+  watch(`${APP_FOLDER}**/*.ts`, typescript);
 };
 
-const typescript = async () => {
-  return await rollup
-    .rollup({
-      input: `${APP_FOLDER}index.ts`,
-      plugins: [rollupTypescript()],
-    })
-    .then(bundle => {
-      return bundle.write({
-        file: `${BUILD_FOLDER}main.js`,
-        format: 'es',
-        name: 'main',
-        sourcemap: true,
-      });
-    });
-};
+const build = series(clean, html, styles, images, typescript);
+const optBuild = series(clean, html, styles, images, typescript, optimiseJs);
 
-const watchers = () => {
-  watch(`${SCCS_FOLDER}*.scss`, styles);
-  watch(`${APP_FOLDER}*.html`, html);
-  watch(`${APP_FOLDER}*.ts`, typescript);
-};
-
-const build = series(
-  cleanBuildFolder,
-  html,
-  styles,
-  imagesOptimisation,
-  typescript
-);
-export { build };
-export default series(build, parallel(connectServer, watchers));
+export { build, optBuild };
+export default series(build, watchers);

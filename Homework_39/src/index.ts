@@ -1,3 +1,9 @@
-import { func } from './app/app';
+import { DBStorageManager } from './app/db';
+import { Modal } from './app/modal';
+import { Todo } from './app/todo';
 
-func({ name: 'stringasdasdas' });
+const modal = new Modal();
+
+const db = new DBStorageManager(localStorage);
+
+new Todo(db, modal);
