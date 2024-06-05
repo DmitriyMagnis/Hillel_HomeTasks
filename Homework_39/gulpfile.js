@@ -1,3 +1,4 @@
+import { babel } from '@rollup/plugin-babel';
 import rollupTypescript from '@rollup/plugin-typescript';
 import bs from 'browser-sync';
 import { deleteAsync } from 'del';
@@ -10,6 +11,7 @@ import gulpSass from 'gulp-sass';
 import sourcemaps from 'gulp-sourcemaps';
 import ssi from 'gulp-ssi';
 import uglify from 'gulp-uglify';
+import { resolve } from 'path';
 import * as rollup from 'rollup';
 import dartSass from 'sass';
 
@@ -64,7 +66,16 @@ const images = () => {
 const typescript = async () => {
   const bundle = await rollup.rollup({
     input: `${APP_FOLDER}index.ts`,
-    plugins: [rollupTypescript()],
+    plugins: [
+      rollupTypescript(),
+      babel({
+        babelHelpers: 'bundled',
+        minified: true,
+        extensions: ['.ts'],
+        include: resolve('src', '**', '*.ts'),
+        presets: ['@babel/preset-env'],
+      }),
+    ],
   });
 
   await bundle
@@ -72,7 +83,7 @@ const typescript = async () => {
       file: `${BUILD_FOLDER}main.js`,
       format: 'es',
       name: 'main',
-      sourcemap: true,
+      sourcemap: false,
     })
     //rollup preventing BrowserSyncEvent resolving in sequence...
     .then(() => {
