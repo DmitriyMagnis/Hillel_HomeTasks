@@ -74,7 +74,7 @@ const config = (env, { mode }) => {
         {
           //for bootstrap
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: getStyles(mode),
         },
         {
           test: /\.s[ac]ss$/i,
