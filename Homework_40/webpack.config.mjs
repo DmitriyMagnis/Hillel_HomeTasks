@@ -11,19 +11,19 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SOURCE_FOLDER = 'src/';
 const BUILD_FOLDER = 'dist/';
 
-const getStyles = (mode = 'development') => {
+const getStyles = isDev => {
   const modules = [
     'style-loader',
     {
       loader: 'css-loader',
       options: {
-        sourceMap: mode === 'development',
+        sourceMap: isDev,
       },
     },
     {
       loader: 'sass-loader',
       options: {
-        sourceMap: mode === 'development',
+        sourceMap: isDev,
         sassOptions: {
           outputStyle: 'compressed',
         },
@@ -74,12 +74,12 @@ const config = (env, { mode }) => {
         {
           //for bootstrap
           test: /\.css$/i,
-          use: getStyles(mode),
+          use: getStyles(isDevelopment),
         },
         {
           test: /\.s[ac]ss$/i,
           exclude: /node_modules/,
-          use: getStyles(mode),
+          use: getStyles(isDevelopment),
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
@@ -138,38 +138,3 @@ const config = (env, { mode }) => {
 };
 
 export default config;
-
-// new ImageMinimizerPlugin({
-//   minimizer: {
-//     implementation: ImageMinimizerPlugin.imageminMinify,
-//     options: {
-//       plugins: [
-//         ['gifsicle', { interlaced: true }],
-//         ['jpegtran', { progressive: true }],
-//         ['optipng', { optimizationLevel: 5 }],
-//         [
-//           'svgo',
-//           {
-//             plugins: [
-//               {
-//                 name: 'preset-default',
-//                 params: {
-//                   overrides: {
-//                     removeViewBox: false,
-//                     addAttributesToSVGElement: {
-//                       params: {
-//                         attributes: [
-//                           { xmlns: 'http://www.w3.org/2000/svg' },
-//                         ],
-//                       },
-//                     },
-//                   },
-//                 },
-//               },
-//             ],
-//           },
-//         ],
-//       ],
-//     },
-//   },
-// }),
