@@ -30,7 +30,7 @@ const getStyles = isDev => {
       },
     },
   ];
-  if (mode === 'production') {
+  if (!isDev) {
     modules.unshift(MiniCssExtractPlugin.loader);
   }
   return modules;
