@@ -1,6 +1,7 @@
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { dirname, resolve } from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -11,36 +12,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SOURCE_FOLDER = 'src/';
 const BUILD_FOLDER = 'dist/';
 
-const getStyles = isDev => {
-  const modules = [
-    'style-loader',
-    {
-      loader: 'css-loader',
-      options: {
-        sourceMap: isDev,
-      },
-    },
-    {
-      loader: 'sass-loader',
-      options: {
-        sourceMap: isDev,
-        sassOptions: {
-          outputStyle: 'compressed',
-        },
-      },
-    },
-  ];
-  if (!isDev) {
-    modules.unshift(MiniCssExtractPlugin.loader);
-  }
-  return modules;
-};
-
-const config = (env, { mode }) => {
-  console.log('mode =>>>> ', mode);
+const config = (_, { mode }) => {
   const isProduction = mode === 'production';
   const isDevelopment = mode === 'development';
-  console.log('isDevelopment =>>>> ', isDevelopment);
+
   return {
     entry: {
       vendors: [resolve(__dirname, SOURCE_FOLDER, 'index.ts')],
@@ -74,12 +49,36 @@ const config = (env, { mode }) => {
         {
           //for bootstrap
           test: /\.css$/i,
-          use: getStyles(isDevelopment),
+          use: [
+            //seperate bootrap lib css
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+            // 'postcss-loader',
+          ],
         },
         {
           test: /\.s[ac]ss$/i,
           exclude: /node_modules/,
-          use: getStyles(isDevelopment),
+          use: [
+            //leave sccs files in js
+            isProduction && MiniCssExtractPlugin.loader,
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: isDevelopment,
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: isDevelopment,
+                sassOptions: {
+                  outputStyle: 'compressed',
+                },
+              },
+            },
+          ],
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
@@ -102,7 +101,9 @@ const config = (env, { mode }) => {
         compressionOptions: { level: 1 },
         threshold: 8192,
       }),
-      new MiniCssExtractPlugin(),
+      new MiniCssExtractPlugin({
+        filename: isProduction ? '[name].[contenthash].css' : '[name].css',
+      }),
       new HtmlWebpackPlugin({
         title: 'webpack test',
         scriptLoading: 'defer',
@@ -121,13 +122,28 @@ const config = (env, { mode }) => {
     ],
     optimization: {
       minimize: isProduction,
-      minimizer: [new TerserPlugin()],
+      minimizer: [
+        new TerserPlugin(),
+        new ImageMinimizerPlugin({
+          minimizer: {
+            implementation: ImageMinimizerPlugin.imageminMinify,
+            options: {
+              plugins: [
+                ['gifsicle', { interlaced: true }],
+                ['jpegtran', { progressive: true }],
+                ['optipng', { optimizationLevel: 7 }],
+              ],
+            },
+          },
+        }),
+      ],
       moduleIds: 'deterministic',
       runtimeChunk: 'single',
       splitChunks: {
         chunks: 'all',
         cacheGroups: {
           bootstrap: {
+            //inject node_modules in seperated chunk
             test: /[\\/]node_modules[\\/]/,
             name: 'bootstrap',
           },
