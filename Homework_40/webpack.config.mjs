@@ -1,4 +1,3 @@
-import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
@@ -97,10 +96,10 @@ const config = (_, { mode }) => {
       hot: isDevelopment,
     },
     plugins: [
-      new CompressionPlugin({
-        compressionOptions: { level: 1 },
-        threshold: 8192,
-      }),
+      // new CompressionPlugin({
+      //   compressionOptions: { level: 1 },
+      //   threshold: 8192,
+      // }),
       new MiniCssExtractPlugin({
         filename: isProduction ? '[name].[contenthash].css' : '[name].css',
       }),
