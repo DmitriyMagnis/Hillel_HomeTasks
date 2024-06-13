@@ -1,13 +1,13 @@
 import { DBStorageManager } from './db';
-import { uuid } from './helpers';
 import { Modal } from './modal';
-import { DBRecord, Nullable, STATUSES } from './types';
+import { DBRecord, Nullable, type OmitedIdRecord } from './types';
 
 export class Todo {
   private form: Nullable<HTMLFormElement>;
   private todoListContainer: Nullable<HTMLDivElement>;
   private db: DBStorageManager;
   private modal: Modal;
+
   constructor(db: DBStorageManager, modal: Modal) {
     this.form = document.querySelector<HTMLFormElement>('.form');
     this.todoListContainer =
@@ -17,12 +17,15 @@ export class Todo {
     this.initEvents();
     this.db.subscribeStorage(this.handleStorageEvent.bind(this));
     this.modal = modal;
-    console.log('xaxa');
   }
-  private init(): void {
-    this.db.getAllRecords().forEach(([key, data]) => {
-      this.drawItem(data, key);
-    });
+  async init() {
+    try {
+      const records = await this.db.getAllRecords();
+      if (!records) return;
+      records.forEach(todoItem => this.drawItem(todoItem, todoItem._id));
+    } catch (e) {
+      console.log('err', e);
+    }
   }
   private initEvents(): void {
     if (this.form) this.form?.addEventListener('submit', this.add.bind(this));
@@ -44,7 +47,7 @@ export class Todo {
     checkbox.classList.add('form-check-input');
     checkbox.setAttribute('type', 'checkbox');
     checkbox.setAttribute('id', id);
-    checkbox.checked = data.status === STATUSES.SUBMITED;
+    checkbox.checked = data.status;
     label.classList.add('todo-list__item-text');
     label.setAttribute('for', id);
     label.textContent = data.value;
@@ -70,22 +73,16 @@ export class Todo {
     const id = target.parentElement.getAttribute('data-todo-id');
 
     const record = this.db.get(id);
+    console.log(record);
     if (record) this.modal.openModal(record, id);
   }
   onCheckboxToggle(target: any) {
     const id = target.parentElement.getAttribute('data-todo-id');
     target.parentElement.classList.toggle('submited');
-    this.db.update(
-      String(id),
-      'status',
-      (target as HTMLInputElement).checked
-        ? STATUSES.SUBMITED
-        : STATUSES.IN_PROGRES
-    );
+    this.db.update(String(id), 'status', (target as HTMLInputElement).checked);
   }
 
   handleTodoItemEvents(e: Event) {
-    console.log(e);
     const target = e.target as Element;
     if (!target?.parentElement) return;
     if (target.classList.contains('todo-list__item-btn')) {
@@ -98,16 +95,25 @@ export class Todo {
       this.onCheckboxToggle(target);
     }
   }
-  add(e: Event) {
+  async add(e: Event) {
     const target = e.target as HTMLFormElement;
     e.preventDefault();
     const inputTask = new FormData(target).get('task');
-    const uniqueId = uuid();
-    const newRecord = { status: STATUSES.IN_PROGRES, value: String(inputTask) };
-    this.db.save(uniqueId, newRecord);
-    this.drawItem(newRecord, uniqueId);
+    // const uniqueId = uuid();
+    const newRecord: OmitedIdRecord = {
+      completed: false,
+      title: String(inputTask),
+    };
+    try {
+      const record = await this.db.save(newRecord);
+      if (record) {
+        this.drawItem(record, record._id);
 
-    this.form?.reset();
+        this.form?.reset();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
   handleStorageEvent(e: StorageEvent) {
     if (e.newValue) {

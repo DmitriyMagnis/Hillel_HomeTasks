@@ -11,6 +11,7 @@ export default [
     rules: {
       'prefer-const': 1,
       'no-console': 1,
+      '@typescript-eslint/no-explicit-any': 1,
     },
   },
 ];

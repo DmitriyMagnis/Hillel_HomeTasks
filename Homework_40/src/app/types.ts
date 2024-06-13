@@ -5,5 +5,13 @@ export enum STATUSES {
 }
 export interface DBRecord {
   value: string;
-  status: STATUSES;
+  status: boolean;
+  _id: string;
 }
+
+export interface ITodoResponse {
+  completed: boolean;
+  _id: string;
+  title: string;
+}
+export type OmitedIdRecord = Omit<ITodoResponse, '_id'>;

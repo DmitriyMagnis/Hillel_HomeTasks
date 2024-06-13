@@ -60,8 +60,8 @@ const config = (_, { mode }) => {
           exclude: /node_modules/,
           use: [
             //leave sccs files in js
-            isProduction && MiniCssExtractPlugin.loader,
-            'style-loader',
+            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            // 'style-loader',
             {
               loader: 'css-loader',
               options: {
