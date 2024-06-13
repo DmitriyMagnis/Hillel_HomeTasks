@@ -27,20 +27,20 @@ todoRouter.post('/create', async (req: Request, res: Response) => {
 });
 todoRouter.post('/update', async (req: Request, res: Response) => {
   const data = req.body;
-
+  console.log(data);
   try {
-    const todos = await todoRepository.updateSingleTodo(data.id, data.body);
+    const todos = await todoRepository.updateSingleTodo(data);
     res.json(todos);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'cant find record' });
   }
 });
-todoRouter.post('/delete/:id', async (req: Request, res: Response) => {
+todoRouter.delete('/delete/:id', async (req: Request, res: Response) => {
   const id = req.params.id;
 
   try {
-    const todos = await todoRepository.deleteTodo(Number(id));
+    const todos = await todoRepository.deleteTodo(id);
     res.json(todos);
   } catch (error) {
     console.log(error);

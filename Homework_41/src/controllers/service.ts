@@ -24,7 +24,7 @@ export class TodoService {
       throw error;
     }
   }
-  async deleteTodo(id: number) {
+  async deleteTodo(id: string) {
     try {
       const todo = await TodoModel.findByIdAndDelete(id);
       return todo;
@@ -33,9 +33,11 @@ export class TodoService {
       throw error;
     }
   }
-  async updateSingleTodo(id: number, data: any) {
+  async updateSingleTodo(data: any) {
     try {
-      const todo = await TodoModel.findByIdAndUpdate(id, data, { new: true });
+      const todo = await TodoModel.findByIdAndUpdate(data._id, data, {
+        new: true,
+      });
       await todo?.save();
       return todo;
     } catch (error) {

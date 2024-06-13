@@ -1,1 +1,0 @@
-{"version":3,"file":"src_app_dynamicChunk_ts.4ea74f7ee78b56ea51b5.js","mappings":";;;;;;;;;;;;;AAAe,SAASA,SAASA,CAAA,EAAG;EAClCC,OAAO,CAACC,GAAG,CAAC,OAAO,CAAC;AACtB","sources":["webpack://homework_40/./src/app/dynamicChunk.ts"],"sourcesContent":["export default function ChunkFunc() {\r\n  console.log('chunk');\r\n}\r\n"],"names":["ChunkFunc","console","log"],"sourceRoot":""}

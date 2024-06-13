@@ -2,14 +2,14 @@ import chalk from 'chalk';
 import type { NextFunction, Request, Response } from 'express';
 
 export class MyLogger {
-  static warn(str: string) {
-    console.log(chalk.yellow(str));
+  static warn(...strs: string[]) {
+    console.log(chalk.yellow(...strs));
   }
-  static info(str: string) {
-    console.log(chalk.blueBright(str));
+  static info(...strs: string[]) {
+    console.log(chalk.blueBright(...strs));
   }
-  static error(str: string) {
-    console.log(chalk.redBright(str));
+  static error(...strs: string[]) {
+    console.log(chalk.redBright(...strs));
   }
   static dir(data: any) {
     console.dir(data);
