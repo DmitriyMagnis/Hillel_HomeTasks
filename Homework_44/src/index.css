@@ -2,12 +2,10 @@ ul {
   padding: 0;
 }
 
-.wrapper {
-  margin: 0 auto;
-  max-width: 400px;
-  font-size: 24px;
-  justify-content: center;
-}
-.reset {
-  display: block;
+button {
+  background: unset;
+  background-color: aqua;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid;
 }
