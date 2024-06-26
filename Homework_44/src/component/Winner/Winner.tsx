@@ -7,7 +7,7 @@ interface IWinner {
   showResult: () => void;
 }
 
-function Winner({ winner, showResult }: IWinner) {
+const Winner = memo(({ winner, showResult }: IWinner) => {
   return (
     <div className={classes.wrapper}>
       {winner && <h4>Winner is:</h4>}
@@ -18,6 +18,6 @@ function Winner({ winner, showResult }: IWinner) {
       {winner && winner.clicks}
     </div>
   );
-}
+});
 
-export default memo(Winner);
+export default Winner;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { LSKEYS, defaultSmiles } from '../constants';
 import { getDeaultSliceFromLS } from '../libs/helpers';
 import type { ISmileItem } from '../types/common';
@@ -24,7 +24,7 @@ export const useSmiles = (): {
     setWinner(max);
     localStorage.setItem(LSKEYS.WINNER, JSON.stringify(max));
   };
-  const onIconClick = (id: number) => {
+  const onIconClick = useCallback((id: number) => {
     setSmiles(prev => {
       const newSmiles = prev.map(smile => ({
         ...smile,
@@ -33,7 +33,7 @@ export const useSmiles = (): {
       localStorage.setItem(LSKEYS.SMILES, JSON.stringify(newSmiles));
       return newSmiles;
     });
-  };
+  }, []);
   const reset = () => {
     setSmiles(defaultSmiles);
     setWinner(null);
