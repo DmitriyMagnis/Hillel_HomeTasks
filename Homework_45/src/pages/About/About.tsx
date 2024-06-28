@@ -1,5 +1,5 @@
-function About() {
+function Component() {
   return <div>About</div>;
 }
 
-export default About;
+export { Component };

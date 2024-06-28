@@ -1,5 +1,5 @@
-import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
+import classes from './PageLoyout.module.css';
 
 interface IPageLayout {
   header?: () => JSX.Element;
@@ -8,13 +8,13 @@ interface IPageLayout {
 
 function PageLayout({ header, footer }: IPageLayout) {
   return (
-    <Container>
+    <div className={classes.wrapper}>
       {header?.() ?? <header>Header</header>}
-      <main>
+      <main className={classes.main}>
         <Outlet />
       </main>
       {footer?.() ?? <footer>footer</footer>}
-    </Container>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
-function Home() {
+const Component = () => {
   console.log('Home');
-  return <div>Home</div>;
-}
+  return <div>Home2</div>;
+};
 
-export default Home;
+export { Component };

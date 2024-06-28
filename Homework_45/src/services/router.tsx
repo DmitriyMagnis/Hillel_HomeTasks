@@ -1,11 +1,24 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 import App from '../App';
-import Home from '../pages/Home/Home';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    children: [{ path: '/', element: <Home /> }],
+    ErrorBoundary: () => <Navigate to="/" replace={true} />,
+    children: [
+      {
+        path: '/',
+        lazy: () => import('../pages/Home/Home'),
+      },
+      {
+        path: '/about',
+        lazy: () => import('../pages/About/About'),
+      },
+      {
+        path: '/contacts',
+        lazy: () => import('../pages/Contacts/Contacts'),
+      },
+    ],
   },
 ]);

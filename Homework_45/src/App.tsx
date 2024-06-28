@@ -1,8 +1,9 @@
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
 import PageLayout from './components/PageLayout';
 
 function App() {
-  console.log('App');
-  return <PageLayout header={() => <div>Addiotional header</div>} />;
+  return <PageLayout header={() => <Header />} footer={() => <Footer />} />;
 }
 
 export default App;
