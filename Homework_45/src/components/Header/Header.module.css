@@ -1,12 +1,26 @@
-.header {
+.link {
   display: flex;
-  justify-content: center;
-  min-height: 50px;
+  align-items: center;
+  min-width: 50px;
+}
+.active {
+  color: var(--btn-color-main);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  text-transform: uppercase;
+}
+.header {
+  border-bottom: 1px solid #c8c8c8;
+}
+.wrapper {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
 }
 .navigation {
   display: flex;
-  gap: 20px;
-}
-.active {
-  color: var(--bs-blue);
+  gap: 10px;
 }

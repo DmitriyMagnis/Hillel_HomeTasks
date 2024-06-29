@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import type { LinkClassNameType } from '../../types';
+import Container from '../Container/Container';
 import classes from './Header.module.css';
 
 function Header() {
@@ -9,23 +10,22 @@ function Header() {
 
   return (
     <header className={classes.header}>
-      <nav className={classes.navigation}>
-        <div>
+      <Container className={classes.wrapper}>
+        <h4 className={classes.logo}>React-Todo</h4>
+        <nav className={classes.navigation}>
           <NavLink className={cn} to={'/'}>
-            Ho
+            Home
           </NavLink>
-        </div>
-        <div>
+
           <NavLink className={cn} to={'/about'}>
             About
           </NavLink>
-        </div>
-        <div>
+
           <NavLink className={cn} to={'/contacts'}>
             Contacts
           </NavLink>
-        </div>
-      </nav>
+        </nav>
+      </Container>
     </header>
   );
 }
