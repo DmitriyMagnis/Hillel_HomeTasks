@@ -13,6 +13,7 @@ export default function Todo() {
       {todos.length === 0 && (
         <h4 className={classes.empty}>Todos list is empty!</h4>
       )}
+
       <div className={classes.wrapper}>
         {todos.map(item => (
           <TodoItem
@@ -20,7 +21,7 @@ export default function Todo() {
             {...item}
             onDelete={todoHandlers.delete}
             onUpdate={todoHandlers.update}
-          ></TodoItem>
+          />
         ))}
       </div>
     </>
