@@ -1,17 +1,28 @@
 :root {
   --btn-color-main: #258aef;
   --btn-color-secondary: rgb(248, 54, 89);
+  --font-color-main: #000;
 
-  --bg-color: #fff;
   --text-color: #fff;
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --text-color: #fff;
-      --bg-color: #258aef;
-      --btn-color-main: #258aef;
-      --btn-color-secondary: rgb(248, 54, 89);
-    }
-  }
+  --border-main: 1px solid rgb(240, 242, 250);
+  --error: rgb(247, 0, 45);
+  --error-100: rgb(245 137 157 / 53%);
+
+  --success: #5cb85c;
+}
+[data-theme='light'] {
+  --header-bg-color: rgb(240, 242, 250);
+  --body-bg-color: #fff;
+  --todo-card-bg-color: #fff;
+  --text-color-accent: #000;
+  --active-link-accents: #258aef;
+}
+[data-theme='dark'] {
+  --header-bg-color: #212529;
+  --body-bg-color: #212529;
+  --todo-card-bg-color: #272b2f;
+  --text-color-accent: #fff;
+  --active-link-accents: #5cb85c;
 }
 
 body {
@@ -22,6 +33,12 @@ a {
   text-decoration: none;
   color: unset;
 }
+input,
+button,
+textarea {
+  border: unset;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

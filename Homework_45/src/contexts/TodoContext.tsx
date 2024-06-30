@@ -1,10 +1,11 @@
 import {
   createContext,
   useCallback,
+  useEffect,
   useReducer,
   type PropsWithChildren,
 } from 'react';
-import { createReducer } from '../misc/helpers';
+import { createReducer, getInitialTodoSate } from '../misc/helpers';
 import {
   ActionTypes,
   type ActionHandlers,
@@ -14,28 +15,29 @@ import {
 } from '../types';
 
 export const TodoContext = createContext<ITodoItem[]>([]);
-export const TodoDispatchContext = createContext<ITodoDipsatcher>(null!);
+export const TodoDispatchContext = createContext<ITodoDipsatcher>({
+  add: () => {},
+  delete: () => {},
+  update: () => {},
+});
 
-const initialTodoState: ITodoItem[] = [
-  { id: '1', title: 'title', status: true, description: 'asdasda' },
-];
+const initialTodoState: ITodoState = getInitialTodoSate();
 
 const todoReducers: ActionHandlers<ITodoState, ActionTypes> = {
-  [ActionTypes.ADD]: (state, action) => {
-    console.log(action);
-    return state;
+  [ActionTypes.ADD]: (todos, { payload }) => {
+    return [...todos, payload];
   },
-  [ActionTypes.UPDATE]: (state: ITodoState, action) => {
-    console.log(action);
-    return state;
+  [ActionTypes.UPDATE]: (todos, { payload }) => {
+    return todos.map(todo =>
+      payload.id === todo.id ? { ...todo, ...payload } : todo
+    );
   },
-  [ActionTypes.REMOVE]: (state: ITodoState, action) => {
-    console.log(action);
-    return state;
+  [ActionTypes.REMOVE]: (todos, { payload }) => {
+    return todos.filter(todo => todo.id !== payload);
   },
 };
 
-function TodoContextProvider({ children }: PropsWithChildren) {
+function TodoProvider({ children }: PropsWithChildren) {
   const [todos, dispatch] = useReducer(
     createReducer(todoReducers),
     initialTodoState
@@ -50,6 +52,10 @@ function TodoContextProvider({ children }: PropsWithChildren) {
   const handleUpdateTodo: ITodoDipsatcher['update'] = useCallback(payload => {
     dispatch({ type: ActionTypes.UPDATE, payload });
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   return (
     <TodoContext.Provider value={todos}>
@@ -66,4 +72,4 @@ function TodoContextProvider({ children }: PropsWithChildren) {
   );
 }
 
-export default TodoContextProvider;
+export default TodoProvider;

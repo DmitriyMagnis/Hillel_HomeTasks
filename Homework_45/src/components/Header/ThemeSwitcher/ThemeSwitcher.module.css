@@ -1,0 +1,8 @@
+.wrapper {
+  margin-left: auto;
+  cursor: pointer;
+  & .svg {
+    fill: var(--text-color-accent);
+    stroke: var(--text-color-accent);
+  }
+}

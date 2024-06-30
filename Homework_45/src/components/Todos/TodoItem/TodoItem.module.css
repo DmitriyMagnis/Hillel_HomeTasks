@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px;
+  background-color: var(--todo-card-bg-color);
+  border-radius: 5px;
+}
+.taskId {
+  font-weight: bold;
+  font-size: 18px;
+  border-bottom: var(--border-main);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.status {
+  margin-bottom: 5px;
+}
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  border-top: var(--border-main);
+  padding-top: 7px;
+}

@@ -4,16 +4,18 @@
   min-width: 50px;
 }
 .active {
-  color: var(--btn-color-main);
+  color: var(--active-link-accents);
 }
 .logo {
   display: flex;
   align-items: center;
-  margin: 0;
+
   text-transform: uppercase;
 }
 .header {
-  border-bottom: 1px solid #c8c8c8;
+  color: var(--text-color-accent);
+  /* background-color: #f0f2fa; */
+  background-color: var(--header-bg-color);
 }
 .wrapper {
   display: flex;

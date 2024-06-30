@@ -6,7 +6,7 @@ function PageHead({
   className,
   children,
 }: PropsWithChildren<{ className?: string }>) {
-  return <h1 className={classNames(className, classes.main)}>{children}</h1>;
+  return <h2 className={classNames(className, classes.main)}>{children}</h2>;
 }
 
 export default PageHead;

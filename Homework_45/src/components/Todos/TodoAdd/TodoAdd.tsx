@@ -1,5 +1,9 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { uuid, validate } from '../../../misc/helpers';
 import type { ITodoDipsatcher } from '../../../types';
+import Button from '../../Button/Button';
+import Input from '../../Input/Input';
+import classes from './TodoAdd.module.css';
 
 interface CAddTodo {
   onAdd: ITodoDipsatcher['add'];
@@ -7,24 +11,35 @@ interface CAddTodo {
 
 function TodoAdd({ onAdd }: CAddTodo) {
   const [value, setValue] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // onAdd({title: });
-    console.log(value);
+    const isValid = validate(value);
+    if (isValid) {
+      onAdd({ title: value, id: String(uuid()), status: false });
+      setValue('');
+      console.log(value);
+    } else setError('Wrong input');
   };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (error) setError(null);
+    setValue(e.target.value);
+  };
+
   return (
-    <form onSubmit={onSubmit}>
-      <div>
-        <label htmlFor="todoAdd">Add your task</label>
-        <input
-          type="text"
-          id="todoAdd"
-          value={value}
-          onChange={e => setValue(e.target.value)}
-        />
-      </div>
-      <button>Add</button>
+    <form className={classes.form} onSubmit={onSubmit}>
+      <Input
+        name="name"
+        title="Add your task"
+        value={value}
+        placeholder="Enter task"
+        onChange={onChange}
+        error={error}
+      />
+
+      <Button variants="main">Add</Button>
     </form>
   );
 }

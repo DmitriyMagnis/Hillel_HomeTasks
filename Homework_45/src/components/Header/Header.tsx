@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import type { LinkClassNameType } from '../../types';
 import Container from '../Container/Container';
 import classes from './Header.module.css';
+import ThemeSwitcher from './ThemeSwitcher/ThemeSwitcher';
 
 function Header() {
   const cn: LinkClassNameType = ({ isActive }) =>
@@ -25,6 +26,7 @@ function Header() {
             Contacts
           </NavLink>
         </nav>
+        <ThemeSwitcher />
       </Container>
     </header>
   );

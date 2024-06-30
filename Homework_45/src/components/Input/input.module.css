@@ -1,0 +1,28 @@
+.inputGroup {
+  gap: 7px;
+
+  & > label {
+    cursor: pointer;
+    font-size: 13px;
+  }
+  &.error .input {
+    outline: 1px solid var(--error);
+    background-color: var(--error-100);
+    &::placeholder {
+      color: var(--text-color);
+    }
+  }
+}
+.input {
+  display: block;
+  padding: 7px 12px;
+  margin-top: 7px;
+  color: var(--text-color-accent);
+  background: rgba(203, 206, 214, 0.3);
+  border-radius: 3px;
+  font-size: 13px;
+  &:hover,
+  &:focus {
+    outline: 1px solid var(--btn-color-main);
+  }
+}

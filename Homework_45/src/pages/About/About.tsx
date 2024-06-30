@@ -5,6 +5,12 @@ function Component() {
   return (
     <Container>
       <PageHead>About Us</PageHead>
+      <div>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis quam
+        facere hic. Ad accusantium a fugiat in, alias maiores dignissimos quidem
+        consequatur. Molestiae harum dolore ex voluptates facilis consequuntur
+        ipsum!
+      </div>
     </Container>
   );
 }

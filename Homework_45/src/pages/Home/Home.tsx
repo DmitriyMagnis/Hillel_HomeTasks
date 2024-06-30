@@ -3,10 +3,9 @@ import PageHead from '../../components/PageHead/PageHead';
 import Todo from '../../components/Todos/Todo';
 
 const Component = () => {
-  console.log('Home');
   return (
     <Container>
-      <PageHead>Welcome! This is make your tasks for every day!</PageHead>
+      <PageHead>Welcome! Create your tasks for all day!</PageHead>
       <Todo />
     </Container>
   );

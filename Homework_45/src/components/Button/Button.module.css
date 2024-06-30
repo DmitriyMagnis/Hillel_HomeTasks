@@ -1,0 +1,16 @@
+.button {
+  padding: 7px 15px;
+  border-radius: 3px;
+  color: var(--text-color);
+  cursor: pointer;
+  background-color: var(--btn-color-main);
+  &:hover {
+    filter: brightness(93%);
+  }
+}
+.main {
+  background-color: var(--btn-color-main);
+}
+.secondary {
+  background-color: var(--btn-color-secondary);
+}
