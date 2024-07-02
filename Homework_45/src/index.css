@@ -7,7 +7,7 @@
   --border-main: 1px solid rgb(240, 242, 250);
   --error: rgb(247, 0, 45);
   --error-100: rgb(245 137 157 / 53%);
-
+  --disabled: #bfbfbf;
   --success: #5cb85c;
 }
 [data-theme='light'] {

@@ -1,6 +1,6 @@
 import { useThemeDispatch, useThemeState } from '../../../hooks/useTheme';
 import { ITheme } from '../../../types';
-import BaseIcon from '../../Icons/BaseIcon';
+import BaseIcon from '../../ui/Icons/BaseIcon';
 import classes from './ThemeSwitcher.module.css';
 
 export default function ThemeSwitcher() {

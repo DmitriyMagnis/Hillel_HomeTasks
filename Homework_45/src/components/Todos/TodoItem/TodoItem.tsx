@@ -1,9 +1,11 @@
-import { memo, useState } from 'react';
+import { useFormik } from 'formik';
+import { memo } from 'react';
 import useDidMountEffect from '../../../hooks/useDidMount';
 import type { ITodoDipsatcher, ITodoItem } from '../../../types';
-import Button from '../../Button/Button';
-import Checkbox from '../../Checkbox/Checkbox';
-import Input from '../../Input/Input';
+import Button from '../../ui/Button/Button';
+import Checkbox from '../../ui/Checkbox/Checkbox';
+import Input from '../../ui/Input/Input';
+import { TodoItemSchema } from './Schema';
 import classes from './TodoItem.module.css';
 
 interface CTodoItem extends ITodoItem {
@@ -11,55 +13,74 @@ interface CTodoItem extends ITodoItem {
   onUpdate: ITodoDipsatcher['update'];
 }
 
+interface ITodoItemFormikState {
+  title: string;
+  status: boolean;
+}
+
 const TodoItem = memo(
   ({ id, title, status, onDelete, onUpdate }: CTodoItem) => {
-    const [isSubmiting, setIsSubmiting] = useState(false);
-    const [value, setValue] = useState(title);
-    const [innerStatus, setStatus] = useState(status);
+    const formik = useFormik<ITodoItemFormikState>({
+      initialValues: {
+        title,
+        status,
+      },
+      validationSchema: TodoItemSchema,
+      onSubmit(values, helperes) {
+        onUpdate({
+          id,
+          title: values.title,
+          status: values.status,
+        });
+        helperes.setSubmitting(false);
+      },
+    });
 
     useDidMountEffect(() => {
-      onUpdate({ status: innerStatus, id });
-    }, [innerStatus]);
+      onUpdate({ status: formik.values.status, id });
+    }, [formik.values.status]);
 
     return (
-      <form className={classes.form}>
+      <form className={classes.form} onSubmit={formik.handleSubmit}>
         <div className={classes.taskId}>Task: #{id}</div>
 
-        {isSubmiting ? (
+        {formik.isSubmitting ? (
           <Input
-            name={title}
-            value={value}
-            onChange={e => setValue(e.target.value)}
+            name="title"
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            error={formik.errors.title}
           />
         ) : (
           <div>{title}</div>
         )}
 
         <Checkbox
-          name={id}
+          name="status"
+          id={id}
           className={classes.status}
-          checked={innerStatus}
-          onChange={e => setStatus(e.target.checked)}
-          label={innerStatus ? 'submited' : 'in progres'}
+          checked={formik.values.status}
+          onChange={formik.handleChange}
+          label={formik.values.status ? 'submited' : 'in progres'}
         />
 
         <div className={classes.buttonGroup}>
-          {isSubmiting ? (
+          {formik.isSubmitting ? (
             <Button
-              type="button"
+              // key prop is neccesery to not triggering submit event when button rerendering
+              key="submit"
+              type="submit"
               variants="main"
-              onClick={() => {
-                onUpdate({ id, title: value, status: innerStatus });
-                setIsSubmiting(false);
-              }}
+              disabled={!formik.isValid}
             >
               Save
             </Button>
           ) : (
             <Button
+              key="notSubmit"
               type="button"
               variants="main"
-              onClick={() => setIsSubmiting(true)}
+              onClick={() => formik.setSubmitting(true)}
             >
               Update
             </Button>

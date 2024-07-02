@@ -1,45 +1,46 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { uuid, validate } from '../../../misc/helpers';
+import { useFormik } from 'formik';
+import { uuid } from '../../../misc/helpers';
 import type { ITodoDipsatcher } from '../../../types';
-import Button from '../../Button/Button';
-import Input from '../../Input/Input';
+import Button from '../../ui/Button/Button';
+import Input from '../../ui/Input/Input';
+import { AddSchema } from './Schema';
 import classes from './TodoAdd.module.css';
 
 interface CAddTodo {
   onAdd: ITodoDipsatcher['add'];
 }
 
+interface ITodoAddFormiState {
+  addValue: string;
+}
+
 function TodoAdd({ onAdd }: CAddTodo) {
-  const [value, setValue] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
-
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const isValid = validate(value);
-    if (isValid) {
-      onAdd({ title: value, id: String(uuid()), status: false });
-      setValue('');
-      console.log(value);
-    } else setError('Wrong input');
-  };
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (error) setError(null);
-    setValue(e.target.value);
-  };
+  const formik = useFormik<ITodoAddFormiState>({
+    initialValues: {
+      addValue: '',
+    },
+    validationSchema: AddSchema,
+    onSubmit({ addValue }, { resetForm }) {
+      onAdd({ title: addValue, id: String(uuid()), status: false });
+      resetForm();
+    },
+  });
 
   return (
-    <form className={classes.form} onSubmit={onSubmit}>
+    <form className={classes.form} onSubmit={formik.handleSubmit}>
       <Input
-        name="name"
+        name="addValue"
         title="Add your task"
-        value={value}
+        value={formik.values.addValue}
         placeholder="Enter task"
-        onChange={onChange}
-        error={error}
+        onChange={formik.handleChange}
+        error={formik.errors.addValue}
+        onFocus={formik.handleBlur}
       />
 
-      <Button variants="main">Add</Button>
+      <Button variants="main" disabled={!formik.isValid || !formik.dirty}>
+        Add
+      </Button>
     </form>
   );
 }

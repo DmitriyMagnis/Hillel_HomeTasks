@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import type { LinkClassNameType } from '../../types';
-import Container from '../Container/Container';
+import Container from '../ui/Container/Container';
 import classes from './Header.module.css';
 import ThemeSwitcher from './ThemeSwitcher/ThemeSwitcher';
 

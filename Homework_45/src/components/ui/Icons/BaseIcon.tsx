@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import moon from '../../../public/moon.svg';
-import sun from '../../../public/sun.svg';
+import moon from '../../../../public/moon.svg';
+import sun from '../../../../public/sun.svg';
 import classes from './BaseIcon.module.css';
 
 type SVGNames = 'sun' | 'moon';

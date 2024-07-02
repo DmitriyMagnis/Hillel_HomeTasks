@@ -1,5 +1,5 @@
-import Container from '../../components/Container/Container';
-import PageHead from '../../components/PageHead/PageHead';
+import Container from '../../components/ui/Container/Container';
+import PageHead from '../../components/ui/PageHead/PageHead';
 
 function Component() {
   return (

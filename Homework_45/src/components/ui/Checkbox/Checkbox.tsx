@@ -5,13 +5,14 @@ import classes from './Checkbox.module.css';
 interface CCheckbox extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   name: string;
+  id: string;
 }
 
-const Checkbox = ({ onChange, className, label, name, ...rest }: CCheckbox) => {
+const Checkbox = ({ id, onChange, className, label, ...rest }: CCheckbox) => {
   return (
     <div className={classNames(classes.wrapper, className)}>
-      <input id={name} type="checkbox" {...rest} onChange={onChange} />
-      {label && <label htmlFor={name}>{label}</label>}
+      <input id={id} type="checkbox" {...rest} onChange={onChange} />
+      {label && <label htmlFor={id}>{label}</label>}
     </div>
   );
 };
