@@ -67,7 +67,7 @@ const TodoItem = memo(
         <div className={classes.buttonGroup}>
           {formik.isSubmitting ? (
             <Button
-              // key prop is neccesery to not triggering submit event when button rerendering
+              // key prop is neccesery for prevent submit event when button rerendered
               key="submit"
               type="submit"
               variants="main"
