@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 // import { getInitialTodoSate } from '../../misc/helpers';
+import { uuid } from '../../misc/helpers';
 import { ITodoItem } from '../../types';
 
 const initialState = {
@@ -15,8 +16,16 @@ export const todosSlice = createSlice({
     selectTodos: state => state.items,
   },
   reducers: {
-    add: (state, { payload }: PayloadAction<ITodoItem>) => {
-      state.items.push(payload);
+    add: {
+      reducer: (state, { payload }: PayloadAction<ITodoItem>) => {
+        state.items.push(payload);
+      },
+      prepare: (data: Pick<ITodoItem, 'title'>) => {
+        const id = String(uuid());
+        return {
+          payload: { title: data.title, id, status: false },
+        };
+      },
     },
     remove: (state, { payload }: PayloadAction<string>) => {
       const newState = state.items.filter(todo => todo.id !== payload);

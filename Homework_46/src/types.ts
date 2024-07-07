@@ -24,7 +24,7 @@ export type ReducerAction<P> = {
 };
 
 export type ITodoDipsatcher = {
-  add: (payload: ITodoItem) => void;
+  add: (payload: Pick<ITodoItem, 'title'>) => void;
   delete: (id: string) => void;
   update: (payload: Partial<ITodoItem>) => void;
 };

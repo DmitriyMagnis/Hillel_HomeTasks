@@ -1,5 +1,4 @@
 import { useFormik } from 'formik';
-import { uuid } from '../../../misc/helpers';
 import type { ITodoDipsatcher } from '../../../types';
 import Button from '../../ui/Button/Button';
 import Input from '../../ui/Input/Input';
@@ -21,7 +20,7 @@ function TodoAdd({ onAdd }: CAddTodo) {
     },
     validationSchema: AddSchema,
     onSubmit({ addValue }, { resetForm }) {
-      onAdd({ title: addValue, id: String(uuid()), status: false });
+      onAdd({ title: addValue });
       resetForm();
     },
   });

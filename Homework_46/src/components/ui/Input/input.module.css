@@ -1,6 +1,12 @@
 .inputGroup {
   position: relative;
   /* gap: 7px; */
+  &:not(:has(label)) {
+    min-height: 45px;
+    & .errorMsg {
+      bottom: 14px;
+    }
+  }
 
   & > label {
     display: block;
