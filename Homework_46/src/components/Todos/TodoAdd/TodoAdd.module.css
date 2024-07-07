@@ -1,0 +1,9 @@
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 10px;
+  border-bottom: var(--border-main);
+  padding-bottom: 20px;
+}
