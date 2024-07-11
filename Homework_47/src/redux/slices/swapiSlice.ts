@@ -9,7 +9,6 @@ import api from '../../api';
 import type { ISwapyItem } from '../../myTypes';
 
 const initialState = {
-  //   items: getInitialTodoSate(),
   item: null as ISwapyItem | null,
   loading: false,
   error: null as AxiosError | null,
@@ -22,9 +21,7 @@ export const swapySlice = createSlice({
     selectSwapyItem: state => state.item,
     selectSwapyState: state => state,
   },
-  reducers: {
-    getItem: () => {},
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(fetchSwapyItemById.pending, state => {
@@ -42,6 +39,7 @@ export const swapySlice = createSlice({
         fetchSwapyItemById.rejected,
         (state, { payload }: PayloadAction<AxiosError>) => {
           state.error = payload;
+          state.item = null;
           state.loading = false;
         }
       );
@@ -62,7 +60,7 @@ export const fetchSwapyItemById: any = createAsyncThunk(
   }
 );
 
-export const { getItem } = swapySlice.actions;
+// export const { getItem } = swapySlice.actions;
 
 export const { selectSwapyItem, selectSwapyState } = swapySlice.selectors;
 
