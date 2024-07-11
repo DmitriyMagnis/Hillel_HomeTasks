@@ -2,10 +2,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import {
   Box,
   CircularProgress,
+  Divider,
   Grid,
   IconButton,
   InputAdornment,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from '@mui/material';
@@ -19,7 +21,7 @@ import { schema } from './schema';
 
 const Swapi = () => {
   const dispatch = useAppDispatch();
-  const { item, loading } = useAppSelector(selectSwapyState);
+  const { item, loading, error } = useAppSelector(selectSwapyState);
   const formik = useFormik<{ peopleId: string }>({
     initialValues: {
       peopleId: '',
@@ -66,17 +68,37 @@ const Swapi = () => {
               }}
             />
 
-            <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+            <IconButton
+              disabled={!formik.isValid}
+              type="submit"
+              sx={{ p: '10px' }}
+              aria-label="search"
+            >
               <SearchIcon />
             </IconButton>
           </Box>
         </Paper>
       </Grid>
       <Grid item xs={12}>
+        {error && (
+          <Paper sx={{ p: 2 }}>
+            <Typography>Not Found</Typography>
+          </Paper>
+        )}
         {loading && <CircularProgress size="30px" color="inherit" />}
         {item && (
-          <Paper sx={{ p: 2 }}>
-            <Typography>{item.name}</Typography>
+          <Paper
+            sx={{
+              p: 2,
+            }}
+          >
+            <Stack spacing={2} textAlign="start">
+              <Typography>{item.name}</Typography>
+              <Divider />
+              <Typography>Height: {item.height}</Typography>
+              <Divider />
+              <Typography>Weight: {item.mass} kg</Typography>
+            </Stack>
           </Paper>
         )}
       </Grid>

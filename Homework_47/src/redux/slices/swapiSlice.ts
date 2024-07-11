@@ -4,8 +4,9 @@ import {
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import axios, { type AxiosError } from 'axios';
+
 import api from '../../api';
-import type { ISwapyItem } from '../../types';
+import type { ISwapyItem } from '../../myTypes';
 
 const initialState = {
   //   items: getInitialTodoSate(),
@@ -28,6 +29,7 @@ export const swapySlice = createSlice({
     builder
       .addCase(fetchSwapyItemById.pending, state => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(
         fetchSwapyItemById.fulfilled,
@@ -38,7 +40,7 @@ export const swapySlice = createSlice({
       )
       .addCase(
         fetchSwapyItemById.rejected,
-        (state, { payload }: PayloadAction<any>) => {
+        (state, { payload }: PayloadAction<AxiosError>) => {
           state.error = payload;
           state.loading = false;
         }
@@ -46,21 +48,19 @@ export const swapySlice = createSlice({
   },
 });
 
-const fetchSwapyItemById = createAsyncThunk(
+export const fetchSwapyItemById: any = createAsyncThunk(
   'swapy/fetchById',
   async (id: string, thunkApi) => {
     try {
       const response = await api.fetchById(id);
       return response.data;
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return thunkApi.rejectWithValue(err.response);
-      }
-      console.error(String(err));
+      return thunkApi.rejectWithValue(
+        axios.isAxiosError(err) ? err.response : new Error(String(err))
+      );
     }
   }
 );
-export { fetchSwapyItemById };
 
 export const { getItem } = swapySlice.actions;
 
