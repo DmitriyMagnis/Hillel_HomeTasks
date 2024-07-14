@@ -1,0 +1,14 @@
+### Retrieve the Access JWT
+GET http://localhost:3000
+Date: Wed, 27 Apr 2023 07:28:00 GMT
+
+### Retrieve the Access JWT 2
+POST http://localhost:3000/create
+Content-Type: application/json
+
+{
+    "title": "1st todo",
+    "completed": true
+}
+
+###
