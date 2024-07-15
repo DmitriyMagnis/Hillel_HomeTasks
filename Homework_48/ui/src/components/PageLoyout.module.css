@@ -1,0 +1,10 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--body-bg-color);
+  color: var(--text-color-accent);
+}
+.main {
+  flex-grow: 1;
+}

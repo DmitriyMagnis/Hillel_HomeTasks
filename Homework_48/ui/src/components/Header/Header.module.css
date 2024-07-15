@@ -1,0 +1,28 @@
+.link {
+  display: flex;
+  align-items: center;
+  min-width: 50px;
+}
+.active {
+  color: var(--active-link-accents);
+}
+.logo {
+  display: flex;
+  align-items: center;
+
+  text-transform: uppercase;
+}
+.header {
+  color: var(--text-color-accent);
+  /* background-color: #f0f2fa; */
+  background-color: var(--header-bg-color);
+}
+.wrapper {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+}
+.navigation {
+  display: flex;
+  gap: 10px;
+}

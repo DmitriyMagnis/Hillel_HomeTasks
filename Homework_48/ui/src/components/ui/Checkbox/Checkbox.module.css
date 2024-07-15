@@ -1,0 +1,45 @@
+.wrapper {
+  & > input {
+    margin-right: 5px;
+  }
+  & input:checked ~ label:before {
+    background-color: var(--btn-color-main);
+  }
+  & input:checked ~ label {
+    background-color: var(--success);
+  }
+  & label {
+    position: relative;
+    background-color: var(--btn-color-main);
+    padding: 2px 13px;
+    font-size: 13px;
+    border-radius: 3px;
+    color: var(--text-color);
+    cursor: pointer;
+    &:after {
+      left: -15px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    &:after,
+    &:before {
+      content: '';
+      position: absolute;
+    }
+    &:before {
+      top: 1px;
+      left: 0;
+      transform: translateX(-112%);
+      content: '';
+      height: 20px;
+      width: 20px;
+      background-color: #eee;
+    }
+  }
+}
