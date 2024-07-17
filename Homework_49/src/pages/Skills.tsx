@@ -6,6 +6,7 @@ import {
   ListItemText,
   Stack,
   Typography,
+  Zoom,
 } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import JsIcon from '../components/Icons/JsIcon';
@@ -17,9 +18,36 @@ import NodeIcon from '../components/Icons/NodeIcon';
 import WebpackIcon from '../components/Icons/WebpackIcon';
 import FigmaIcon from '../components/Icons/FirgmaIcon';
 
+const icons = [
+  { Icon: JsIcon },
+  { Icon: ReactIcon },
+  { Icon: CssIcon },
+  { Icon: HtmlIcon },
+  { Icon: ScssIcon },
+  { Icon: NodeIcon },
+  { Icon: WebpackIcon },
+  { Icon: FigmaIcon },
+];
+
+const workflowItems = [
+  { title: 'Mobile-First, Responsive Design' },
+  { title: 'Modern Web Applications' },
+  { title: 'Cross Browser Testing & Debugging' },
+  { title: 'Agile Development & Scrum' },
+];
+
 const Skills = () => {
   return (
-    <Box sx={{ fontWeight: 400, color: 'grey.600' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%',
+        fontWeight: 400,
+        color: 'grey.600',
+      }}
+    >
       <Typography variant="h2" sx={{ mb: '3rem' }}>
         Skills
       </Typography>
@@ -28,47 +56,38 @@ const Skills = () => {
         direction="row"
         spacing={2}
         sx={{
+          py: 5,
           '& svg': {
             fontSize: '50px',
+            transition: '.2s ease-in-out',
+            '&:hover': {
+              cursor: 'pointer',
+              color: 'black',
+            },
           },
         }}
       >
-        <JsIcon />
-        <ReactIcon />
-        <CssIcon />
-        <HtmlIcon />
-        <ScssIcon />
-        <NodeIcon />
-        <WebpackIcon />
-        <FigmaIcon />
+        {icons.map(({ Icon }, i) => (
+          <Zoom key={i} in timeout={(i + 1) * 100}>
+            <div>
+              <Icon />
+            </div>
+          </Zoom>
+        ))}
       </Stack>
       <Box>
         <Typography variant="h6">WORKFLOW</Typography>
         <List sx={{ width: '100%' }}>
-          <ListItem>
-            <ListItemAvatar>
-              <DoneIcon fontSize="medium" />
-            </ListItemAvatar>
-            <ListItemText primary="Mobile-First, Responsive Design" />
-          </ListItem>
-          <ListItem>
-            <ListItemAvatar>
-              <DoneIcon fontSize="medium" />
-            </ListItemAvatar>
-            <ListItemText primary="Modern Web Applications" />
-          </ListItem>
-          <ListItem>
-            <ListItemAvatar>
-              <DoneIcon fontSize="medium" />
-            </ListItemAvatar>
-            <ListItemText primary="Cross Browser Testing & Debugging" />
-          </ListItem>
-          <ListItem>
-            <ListItemAvatar>
-              <DoneIcon fontSize="medium" />
-            </ListItemAvatar>
-            <ListItemText primary="Agile Development & Scrum" />
-          </ListItem>
+          {workflowItems.map(({ title }, i) => (
+            <Zoom key={title} in timeout={(i + 1) * 100}>
+              <ListItem>
+                <ListItemAvatar>
+                  <DoneIcon fontSize="medium" />
+                </ListItemAvatar>
+                <ListItemText primary={title} />
+              </ListItem>
+            </Zoom>
+          ))}
         </List>
       </Box>
     </Box>

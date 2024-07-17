@@ -8,13 +8,13 @@ const JsIcon = () => {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        enable-background="new 0 0 512 512"
+        enableBackground="new 0 0 512 512"
       >
         <g id="5151e0c8492e5103c096af88a51e75c7">
           <path
             display="inline"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M1.008,0.5C0.438,0.583,0.48,1.27,0.521,1.958
 		c0,169.668,0,339.31,0,508.974c169.364,1.135,340.808,0.162,510.979,0.486c0-170.309,0-340.61,0-510.918
 		C341.342,0.5,171.167,0.5,1.008,0.5z M259.893,452.167c-11.822,11.919-30.478,18.938-53.429,18.938

@@ -7,14 +7,14 @@ const NodeIcon = () => {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        enable-background="new 0 0 512 512"
+        enableBackground="new 0 0 512 512"
         fill="currentColor"
       >
         <g id="5151e0c8492e5103c096af88a51f0aa3">
           <path
             display="inline"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M115.889,151.885l-24.053-13.773
 		c-1.512-0.891-2.451-2.499-2.451-4.244v-29.306c0-1.745-0.928-3.364-2.443-4.232l-10.239-5.899
 		c-0.742-0.444-1.601-0.662-2.432-0.662c-0.854,0-1.689,0.218-2.451,0.662l-10.246,5.899c-1.516,0.869-2.44,2.488-2.44,4.232v29.306

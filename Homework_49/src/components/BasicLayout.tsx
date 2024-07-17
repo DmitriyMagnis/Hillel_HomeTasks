@@ -2,14 +2,14 @@ import {
   Box,
   AppBar,
   Toolbar,
-  Typography,
   Drawer,
   Avatar,
   Button,
   type SxProps,
+  IconButton,
 } from '@mui/material';
-import type { PropsWithChildren } from 'react';
-
+import { useState, type PropsWithChildren } from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
 
 const linkStyles: SxProps = {
@@ -22,7 +22,24 @@ const linkStyles: SxProps = {
   },
 };
 
+const navList = [
+  { to: '/', label: 'About' },
+  { to: '/skills', label: 'Skills' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/education', label: 'Education' },
+  { to: '/interests', label: 'Interests' },
+];
+
 const BasicLayout = ({ children }: PropsWithChildren) => {
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar
@@ -34,36 +51,47 @@ const BasicLayout = ({ children }: PropsWithChildren) => {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Permanent drawer
-          </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="end"
+            onClick={handleDrawerOpen}
+            sx={{ color: 'white', ...(open && { display: 'none' }) }}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
+
       <Drawer
+        open={open}
+        // variant="persistent"
+        onClose={handleDrawerClose}
+        anchor={open ? 'bottom' : 'left'}
         sx={{
           display: {
-            sm: 'none',
+            xs: open ? 'block' : 'none',
             md: 'block',
           },
 
-          width: 300,
+          width: open ? '100%' : 300,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: 300,
-
+            width: open ? '100%' : 300,
+            height: open ? 300 : 'inherit',
             bgcolor: 'primary.main',
             boxSizing: 'border-box',
           },
         }}
-        variant="permanent"
-        anchor="left"
+        variant={open ? undefined : 'permanent'}
       >
         <Box
           sx={{
             width: '100%',
-            minHeight: '100vh',
+            minHeight: open ? 300 : '100vh',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: open ? 'row' : 'column',
+
             gap: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -81,42 +109,20 @@ const BasicLayout = ({ children }: PropsWithChildren) => {
               mb: 2,
             }}
           />
-          <Button
-            fullWidth
-            variant="text"
-            component={NavLink}
-            to="/"
-            sx={linkStyles}
-          >
-            About
-          </Button>
-          <Button
-            fullWidth
-            variant="text"
-            component={NavLink}
-            to="/skills"
-            sx={linkStyles}
-          >
-            Skills
-          </Button>
-          <Button
-            fullWidth
-            variant="text"
-            component={NavLink}
-            to="/education"
-            sx={linkStyles}
-          >
-            Education
-          </Button>
-          <Button
-            fullWidth
-            variant="text"
-            component={NavLink}
-            to="/education"
-            sx={linkStyles}
-          >
-            Interests
-          </Button>
+          <Box>
+            {navList.map(({ to, label }) => (
+              <Button
+                key={label}
+                fullWidth
+                variant="text"
+                component={NavLink}
+                to={to}
+                sx={linkStyles}
+              >
+                {label}
+              </Button>
+            ))}
+          </Box>
         </Box>
       </Drawer>
       <Box
