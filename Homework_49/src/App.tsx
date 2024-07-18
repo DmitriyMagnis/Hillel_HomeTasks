@@ -21,6 +21,10 @@ const theme = createTheme({
       fontWeight: 500,
       color: '#343a40',
     },
+    h4: {
+      fontWeight: 500,
+      color: '#343a40',
+    },
   },
 });
 

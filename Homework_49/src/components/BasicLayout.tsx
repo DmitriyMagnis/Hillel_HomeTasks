@@ -11,14 +11,17 @@ import {
 import { useState, type PropsWithChildren } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavLink } from 'react-router-dom';
+import bgImage from '../assets/bg2.png';
 
 const linkStyles: SxProps = {
   color: 'primary.contrastText',
+  borderRadius: 'unset',
   '&:hover': {
     color: 'white',
   },
   '&.active': {
     color: 'white',
+    borderRight: '2px solid white',
   },
 };
 
@@ -65,7 +68,6 @@ const BasicLayout = ({ children }: PropsWithChildren) => {
 
       <Drawer
         open={open}
-        // variant="persistent"
         onClose={handleDrawerClose}
         anchor={open ? 'bottom' : 'left'}
         sx={{
@@ -74,11 +76,11 @@ const BasicLayout = ({ children }: PropsWithChildren) => {
             md: 'block',
           },
 
-          width: open ? '100%' : 300,
+          width: open ? '100%' : 250,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: open ? '100%' : 300,
-            height: open ? 300 : 'inherit',
+            width: open ? '100%' : 250,
+            height: open ? 250 : 'inherit',
             bgcolor: 'primary.main',
             boxSizing: 'border-box',
           },
@@ -88,10 +90,9 @@ const BasicLayout = ({ children }: PropsWithChildren) => {
         <Box
           sx={{
             width: '100%',
-            minHeight: open ? 300 : '100vh',
+            minHeight: open ? 250 : '100vh',
             display: 'flex',
             flexDirection: open ? 'row' : 'column',
-
             gap: 1,
             justifyContent: 'center',
             alignItems: 'center',
@@ -128,8 +129,14 @@ const BasicLayout = ({ children }: PropsWithChildren) => {
       <Box
         component="main"
         sx={{
+          background: {
+            xs: 'none',
+            md: `url(${bgImage}) no-repeat right top / 370px`,
+          },
+
           minHeight: '100vh',
           p: '3rem',
+          flexGrow: 1,
         }}
       >
         {children}

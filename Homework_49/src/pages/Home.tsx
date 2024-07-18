@@ -3,12 +3,19 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TelegramIcon from '@mui/icons-material/Telegram';
+import { NavLink } from 'react-router-dom';
 
 const icons = [
-  { Icon: TelegramIcon },
-  { Icon: LinkedInIcon },
-  { Icon: GitHubIcon },
-  { Icon: FacebookIcon },
+  { Icon: TelegramIcon, to: 'https://t.me/dmitriymagnis' },
+  {
+    Icon: LinkedInIcon,
+    to: 'https://www.linkedin.com/in/dmitriy-chernobrivets-468976176/',
+  },
+  { Icon: GitHubIcon, to: 'https://github.com/DmitriyMagnis' },
+  {
+    Icon: FacebookIcon,
+    to: 'https://www.facebook.com/profile.php?id=100010171387322',
+  },
 ];
 
 const Home = () => {
@@ -61,10 +68,25 @@ const Home = () => {
           </Typography>
         </Zoom>
         <Box>
-          {icons.map(({ Icon }, i) => (
+          {icons.map(({ Icon, to }, i) => (
             <Zoom key={i} in timeout={(i + 1) * 100 + 500}>
-              <IconButton size="large">
-                <Icon color="primary" sx={{ fontSize: '50px' }} />
+              <IconButton
+                size="large"
+                component={NavLink}
+                to={to}
+                target="_blank"
+                sx={{
+                  '&:hover svg': {
+                    color: 'black',
+                  },
+                }}
+              >
+                <Icon
+                  color="primary"
+                  sx={{
+                    fontSize: '50px',
+                  }}
+                />
               </IconButton>
             </Zoom>
           ))}

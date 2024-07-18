@@ -59,7 +59,7 @@ const Skills = () => {
           py: 5,
           '& svg': {
             fontSize: '50px',
-            transition: '.2s ease-in-out',
+
             '&:hover': {
               cursor: 'pointer',
               color: 'black',
