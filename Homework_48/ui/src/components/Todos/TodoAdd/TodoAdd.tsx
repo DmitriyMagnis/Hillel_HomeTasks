@@ -35,9 +35,14 @@ function TodoAdd({ onAdd }: CAddTodo) {
         onChange={formik.handleChange}
         error={formik.errors.addValue}
         onFocus={formik.handleBlur}
+        data-testid="input-test"
       />
 
-      <Button variants="main" disabled={!formik.isValid || !formik.dirty}>
+      <Button
+        data-testid="test-submit"
+        variants="main"
+        disabled={!formik.isValid || !formik.dirty}
+      >
         Add
       </Button>
     </form>

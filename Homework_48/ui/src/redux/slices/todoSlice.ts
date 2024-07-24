@@ -6,7 +6,7 @@ import {
 // import { getInitialTodoSate } from '../../misc/helpers';
 import { ITodoItem } from '../../types';
 
-const initialState = {
+export const initialState = {
   //   items: getInitialTodoSate(),
   items: [] as ITodoItem[],
   loading: false,

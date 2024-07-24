@@ -30,7 +30,6 @@ const TodoItem = memo(
       validationSchema: TodoItemSchema,
 
       onSubmit(values, helperes) {
-        console.log('xaxa');
         onUpdate({
           _id,
           title: values.title,

@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance, type CreateAxiosDefaults } from 'axios';
 import type { ITodoItem } from '../types';
 
-class Api {
+export class Api {
   instance: AxiosInstance;
   constructor(config: CreateAxiosDefaults) {
     this.instance = axios.create(config);

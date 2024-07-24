@@ -41,7 +41,11 @@ const Input = memo(
           {...rest}
         />
 
-        {error && <p className={classes.errorMsg}>{error}</p>}
+        {error && (
+          <p data-testid="error-msg" className={classes.errorMsg}>
+            {error}
+          </p>
+        )}
       </div>
     );
   }
