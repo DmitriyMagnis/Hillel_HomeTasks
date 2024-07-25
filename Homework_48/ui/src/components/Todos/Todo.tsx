@@ -32,7 +32,7 @@ export default function Todo() {
     (item: Partial<ITodoItem>) => dispatch(fetchCreateTodoItem(item)),
     [dispatch]
   );
-
+  if (!todos) return;
   return (
     <>
       <TodoAdd onAdd={add} />

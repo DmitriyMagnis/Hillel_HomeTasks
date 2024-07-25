@@ -7,7 +7,7 @@ export class Api {
     this.instance = axios.create(config);
   }
 
-  fetchAllTodos = () => this.instance.get<ITodoItem[]>(`todos`);
+  fetchAllTodos = () => axios.get<ITodoItem[]>(`http://localhost:5000/todos`);
   fetchCreateTodo = (data: Partial<ITodoItem>) =>
     this.instance.post<ITodoItem>(`create`, data);
   fetchUpdateTodo = (data: Partial<ITodoItem>) =>

@@ -11,7 +11,7 @@ import TodoAdd from '../TodoAdd';
 jest.spyOn(console, 'error').mockImplementation(() => {});
 
 describe('TodoAdd:', () => {
-  let component: ReturnType<typeof renderWithStore>;
+  let component: ReturnType<typeof render>;
   const onAddMock = jest.fn();
 
   beforeEach(() => {

@@ -1,5 +1,3 @@
-import { types } from '@babel/core';
-
 export default {
   roots: ['<rootDir>/src'],
   testMatch: [
@@ -7,7 +5,7 @@ export default {
     '**/?(*.)+(spec|test).+(ts|tsx|js)',
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': 'babel-jest',
+    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
   },
   transformIgnorePatterns: [
     '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
@@ -20,4 +18,18 @@ export default {
   moduleNameMapper: {
     '\\.(css|sass)$': 'identity-obj-proxy',
   },
+  // setupFiles: ['<rootDir>/setup.jest.ts'],
+
+  moduleFileExtensions: [
+    'web.js',
+    'js',
+    'web.ts',
+    'ts',
+    'web.tsx',
+    'tsx',
+    'json',
+    'web.jsx',
+    'jsx',
+    'node',
+  ],
 };
