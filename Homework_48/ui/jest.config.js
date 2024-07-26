@@ -6,6 +6,7 @@ export default {
   ],
   transform: {
     '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
+    '^.+\\.svg$': 'jest-transform-stub',
   },
   transformIgnorePatterns: [
     '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',

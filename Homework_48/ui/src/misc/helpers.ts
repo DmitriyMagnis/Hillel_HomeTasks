@@ -1,6 +1,7 @@
 import type {
   ActionHandlers,
   ActionTypes,
+  ITheme,
   ITodoItem,
   ReducerAction,
 } from '../types';
@@ -24,4 +25,10 @@ export const getInitialTodoSate = (): ITodoItem[] => {
   const state = localStorage.getItem('todos');
   if (state) return JSON.parse(state);
   return [];
+};
+
+export const getDefaultTheme = (deafultTheme: ITheme) => {
+  const theme = localStorage.getItem('theme');
+  if (theme) return JSON.parse(theme);
+  return deafultTheme;
 };

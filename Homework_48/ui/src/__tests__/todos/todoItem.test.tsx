@@ -31,6 +31,19 @@ describe('TODO Item:', () => {
     expect(getByText(/Update/i)).toBeInTheDocument();
   });
 
+  it('should change title and checbox after update', async () => {
+    const { findByTestId, getByTestId, getByText, findByText } = component;
+
+    fireEvent.click(getByText(/Update/i));
+
+    fireEvent.change(await findByTestId('title'), {
+      target: { value: 'changed-title' },
+    });
+    fireEvent.submit(getByText('Save'));
+
+    expect(await findByText('changed-title')).toBeInTheDocument();
+  });
+
   it('should show Input and change button on click, set correct input value', async () => {
     const { findByTestId, getByText, findByText } = component;
 

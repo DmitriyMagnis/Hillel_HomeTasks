@@ -1,12 +1,7 @@
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { ThemeContext, ThemeDispatchContext } from '../contexts/ThemeContext';
 import { ITheme } from '../types';
-
-const getDefaultTheme = (deafultTheme: ITheme) => {
-  const theme = localStorage.getItem('theme');
-  if (theme) return JSON.parse(theme);
-  return deafultTheme;
-};
+import { getDefaultTheme } from '../misc/helpers';
 
 export const useTheme = (): [ITheme, typeof changeTheme] => {
   const [theme, setTheme] = useState<ITheme>(getDefaultTheme(ITheme.LIGHT));

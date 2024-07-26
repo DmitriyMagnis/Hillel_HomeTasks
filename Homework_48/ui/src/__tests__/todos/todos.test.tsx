@@ -1,11 +1,7 @@
-import { fireEvent, getByText, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Todo from '../../components/Todos/Todo';
-import { expectSaga } from 'redux-saga-test-plan';
-import { call, put, take } from 'redux-saga/effects';
+
 import { renderWithStore } from '../__mocks__/mocks';
-import { getAllTodos } from '../../redux/sagas/todos';
-import api from '../../api';
-import { getAll, onError, setLoading } from '../../redux/slices/todoSlice';
 
 const todoItems = [
   { _id: '1231312', title: 'title', completed: false },

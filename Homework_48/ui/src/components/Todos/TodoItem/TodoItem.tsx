@@ -56,7 +56,7 @@ const TodoItem = memo(
             error={formik.errors.title}
           />
         ) : (
-          <div>{title}</div>
+          <div>{formik.values.title}</div>
         )}
 
         <Checkbox

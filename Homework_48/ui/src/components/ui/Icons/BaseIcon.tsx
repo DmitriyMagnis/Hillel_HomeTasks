@@ -29,7 +29,10 @@ export default function BaseIcon({
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <use href={`${SVGMap[variants]}#${variants}`}></use>
+      <use
+        data-testid="svg-use-id"
+        href={`${SVGMap[variants]}#${variants}`}
+      ></use>
     </svg>
   );
 }

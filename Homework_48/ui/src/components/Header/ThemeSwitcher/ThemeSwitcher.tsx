@@ -7,7 +7,13 @@ export default function ThemeSwitcher() {
   const changeTheme = useThemeDispatch();
   const theme = useThemeState();
   return (
-    <div className={classes.wrapper} onClick={() => changeTheme()}>
+    <div
+      className={classes.wrapper}
+      data-testid="test-theme"
+      onClick={() => {
+        changeTheme();
+      }}
+    >
       <BaseIcon
         className={classes.svg}
         width={28}
