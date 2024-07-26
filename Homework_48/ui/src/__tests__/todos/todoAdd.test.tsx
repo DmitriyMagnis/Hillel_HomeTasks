@@ -1,12 +1,5 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-import { renderWithStore } from '../../../../__tests__/__mocks__/mocks';
-import TodoAdd from '../TodoAdd';
+import { fireEvent, render, waitFor } from '@testing-library/react';
+import TodoAdd from '../../components/Todos/TodoAdd/TodoAdd';
 
 jest.spyOn(console, 'error').mockImplementation(() => {});
 

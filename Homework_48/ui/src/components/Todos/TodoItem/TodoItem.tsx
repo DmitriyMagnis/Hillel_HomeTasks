@@ -50,6 +50,7 @@ const TodoItem = memo(
         {formik.isSubmitting ? (
           <Input
             name="title"
+            data-testid="title"
             value={formik.values.title}
             onChange={formik.handleChange}
             error={formik.errors.title}
@@ -59,6 +60,7 @@ const TodoItem = memo(
         )}
 
         <Checkbox
+          data-testid="test-checkbox"
           name="completed"
           id={_id}
           className={classes.status}

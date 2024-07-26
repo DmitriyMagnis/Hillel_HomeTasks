@@ -32,7 +32,6 @@ const Input = memo(
         {title && <label htmlFor={name}>{title}</label>}
         <input
           name={name}
-          id={name}
           className={classes.input}
           placeholder={placeholder}
           type="text"

@@ -1,6 +1,6 @@
 jest.mock('axios');
 import axios from 'axios';
-import { Api } from '../index';
+import { Api } from '../api/index';
 
 const todoItems = [{ _id: '1231312', title: 'title', completed: true }];
 const response = {
