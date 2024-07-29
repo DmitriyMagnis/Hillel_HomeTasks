@@ -27,7 +27,7 @@ describe('testing helepers functions', () => {
     });
     it('return type should be string', () => {
       const random = uuid();
-      console.log(random);
+
       expect(typeof random).toBe('string');
     });
   });

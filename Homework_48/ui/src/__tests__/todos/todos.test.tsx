@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import Todo from '../../components/Todos/Todo';
 
 import { renderWithStore } from '../__mocks__/mocks';
+import { renderRealStore } from '../__mocks__/realStore';
 
 const todoItems = [
   { _id: '1231312', title: 'title', completed: false },
@@ -49,5 +50,22 @@ describe('TODO Test:', () => {
       type: 'todos/fetchAllTodos',
       payload: undefined,
     });
+  });
+
+  it('should render 2 todos on mount', async () => {
+    const { findAllByText } = renderRealStore(<Todo />, {
+      preloadedState: {
+        counter: {
+          value: 0,
+        },
+        todos: {
+          items: todoItems,
+          loading: false,
+          error: null,
+        },
+      },
+    });
+
+    expect(await findAllByText('title')).toHaveLength(2);
   });
 });
