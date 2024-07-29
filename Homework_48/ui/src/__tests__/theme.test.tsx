@@ -1,14 +1,7 @@
-import {
-  act,
-  fireEvent,
-  render,
-  renderHook,
-  waitFor,
-} from '@testing-library/react';
-import { screen } from '@testing-library/dom';
+import { fireEvent, render, renderHook, waitFor } from '@testing-library/react';
 import ThemeProvider from '../contexts/ThemeContext';
 import ThemeSwitcher from '../components/Header/ThemeSwitcher/ThemeSwitcher';
-import { useTheme, useThemeDispatch } from '../hooks/useTheme';
+import { useTheme } from '../hooks/useTheme';
 import * as helpers from '../misc/helpers';
 
 describe('THEME: ', () => {

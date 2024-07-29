@@ -24,6 +24,6 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["node", "jest", "@testing-library/jest-dom"]
   },
-  "include": ["src/**/*", "./setup-jest.ts"]
-  // "exclude": ["src/tests/**/*"]
+  "include": ["src/**/*", "./setup-jest.ts"],
+  "exclude": ["src/**/*.test.ts"]
 }
