@@ -10,7 +10,6 @@ const initialState = {
 
 export const todosSlice = createSlice({
   name: 'todos',
-
   initialState,
   selectors: {
     selectTodos: state => state.items,

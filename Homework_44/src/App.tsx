@@ -5,6 +5,7 @@ import { useSmiles } from './hooks/useSmiles';
 
 const App = () => {
   const { smiles, winner, showResults, onIconClick, reset } = useSmiles();
+
   return (
     <div className={classes.wrapper}>
       <SmileList smileitems={smiles} onIconClick={onIconClick} />

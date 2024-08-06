@@ -7,6 +7,7 @@ import axios, { type AxiosError } from 'axios';
 
 import api from '../../api';
 import type { ISwapyItem } from '../../myTypes';
+import type { AppDispatch, RootState } from '../store';
 
 const initialState = {
   item: null as ISwapyItem | null,
@@ -37,7 +38,7 @@ export const swapySlice = createSlice({
       )
       .addCase(
         fetchSwapyItemById.rejected,
-        (state, { payload }: PayloadAction<AxiosError>) => {
+        (state, { payload }: PayloadAction<any>) => {
           state.error = payload;
           state.item = null;
           state.loading = false;
@@ -46,7 +47,12 @@ export const swapySlice = createSlice({
   },
 });
 
-export const fetchSwapyItemById: any = createAsyncThunk(
+const createAppAsyncThunk = createAsyncThunk.withTypes<{
+  state: RootState;
+  dispatch: AppDispatch;
+}>();
+
+export const fetchSwapyItemById = createAppAsyncThunk(
   'swapy/fetchById',
   async (id: string, thunkApi) => {
     try {
