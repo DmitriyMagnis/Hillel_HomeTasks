@@ -30,8 +30,6 @@ VALUES (7369,'SMITH','CLERK',7902,'1980-12-17', 800, NULL, 20),
 ( 7902, 'FORD','ANALYST', 7566, '1981-12-03', 3000, NULL, 20),
 ( 7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10)
 
-SELECT * FROM EMP
-
 --1. Вибрати всі запити із таблиці EMP(таблиця з заняття 1)
 
 --у яких значення атрибута COMM NULL чи має якесь значення відмінне від NULL
@@ -52,32 +50,51 @@ SELECT EMPNO, ENAME, COMM,
 		ELSE 'SOME_VALUE'
 	END
 ) as NEW_GROUP
-FROM EMP
+FROM dbo.EMP
 
 --3 вибрати унікальні DEPTNO з таблиці EMP
 
-SELECT DISTINCT DEPTNO FROM EMP
+SELECT DISTINCT DEPTNO FROM dbo.EMP
 
 --4 Вибрати EMPNO, ENAME, SAL та провести сортування по атрибуту SAL з найбільшої ло найменшої заробітної плати
 
+SELECT EMPNO, ENAME, SAL FROM dbo.EMP
+ORDER BY SAL DESC
+
 --5 вибрати унікальні комбінації ENAME,SAL з таблиці EMP
+
+SELECT DISTINCT ENAME, SAL FROM dbo.EMP
 
 --6 Виправити помилку в запиті 
 
---SELECT
-
---EMPNO, ENAME, SAL AS NEW_SAL , COMM 
-
---FROM
-
---EMP
-
+--SELECT EMPNO, ENAME, SAL AS NEW_SAL , COMM 
+--FROM EMP
 --WHERE NEW_SAL >1000
+
+SELECT EMPNO, ENAME, SAL AS NEW_SAL ,COMM FROM dbo.EMP
+WHERE SAL > 1000
 
 --7 --Чому запит п.6 є помлковим?
 
---8  вибрати 7 перших запитів, які відсортовані по ENAME
+-- SELECT выполняется после инструкций FROM и WHERE,
+-- поєтому на момент выполнения WHERE NEW_SAL >1000, Алиаса NEW_SAL еще не существует и нельзя на него сослаться.
+
+--8 вибрати 7 перших запитів, які відсортовані по ENAME
+
+SELECT TOP 7 * FROM dbo.EMP ORDER BY ENAME
+
+SELECT * FROM dbo.EMP 
+ORDER BY ENAME 
+OFFSET 0 ROWS
+FETCH NEXT 7 ROWS ONLY
 
 --9 Вибрати отсортовані по ENAME записи, 3 рядки, починаючи з 5
 
+SELECT * FROM dbo.EMP 
+ORDER BY ENAME 
+OFFSET 4 ROWS
+FETCH NEXT 3 ROWS ONLY
+
 --10 Яке ключове слово визначяє порядок сортування (знизу вверх чи зверху вниз)
+
+--ASC (по возрастанию) and DESC(по убыванию)

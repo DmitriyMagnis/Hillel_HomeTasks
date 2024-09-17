@@ -15,6 +15,7 @@ CREATE TABLE dbo.Employee
  Emp_Last_Name	  VARCHAR(50) NOT NULL,
 )
 
+
 INSERT INTO dbo.Employee (Emp_First_Name, Emp_Last_Name)
 VALUES ('SMITH','Macconahi'),
 	   ('Tanya','Balandina'),
