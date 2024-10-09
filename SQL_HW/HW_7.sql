@@ -50,7 +50,8 @@ SELECT * FROM EMP WHERE DEPTNO = 30
 
 --3 Знайти працівників з відділів в 'NEW YORK' або в 'BOSTON':
 
-SELECT * FROM DEPARTMENT
+SELECT * FROM EMP
+LEFT JOIN DEPT ON 
 
 --4 Знайти працівників з відділів в CHICAGO та віком старше 24 роки
 

@@ -53,6 +53,7 @@ SELECT * FROM EMP WHERE DEPTNO = 30
 	EXCEPT
 SELECT * FROM EMP WHERE DEPTNO = 20
 
+
 --2. Об'єднати списки працівників з відділів DEPTNO = 10 та DEPTNO = 30:
 
 SELECT * FROM EMP WHERE DEPTNO = 10
