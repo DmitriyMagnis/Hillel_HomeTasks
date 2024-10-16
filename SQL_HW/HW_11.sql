@@ -10,7 +10,7 @@ VALUES (10, 'ACCOUNTING', 'NEW YORK'),
 (20, 'RESEARCH', 'DALLAS'),
 (30, 'SALES', 'CHICAGO'),
 (40, 'OPERATIONS', 'BOSTON')
-
+DROP TABLE EMP
 CREATE TABLE EMP
 (
 ID INT PRIMARY KEY IDENTITY (1,1) 
@@ -28,7 +28,7 @@ ID INT PRIMARY KEY IDENTITY (1,1)
 
  FOREIGN KEY (DEPTNO) REFERENCES DEPT(DEPTNO)
 )
-
+SELECT * FROM DEPT
 INSERT INTO EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL,COMM,DEPTNO,Age,Email,Phone)
 VALUES (7369,'SMITH','CLERK',7902,'2020-12-17', 800, NULL, 20,100,'Example1@gmail.com','+380502101112'),
 (7499, 'ALLEN', 'SALESMAN', 7698, '2021-02-20', 1600, 300, 30,23,'Example2@gmail.com','+380502101113'),
@@ -81,10 +81,59 @@ VALUES (7369,'SMITH','CLERK',7902,'2020-12-17', 800, NULL, 20,100,'Example1@gmai
 --4.   Вивести інформацію про найстаршого працівника в компанії (таблиця Emp)
 
 SELECT * FROM EMP
-SELECT MAX(HIREDATE) FROM EMP
+SELECT TOP 1 * FROM EMP e ORDER BY e.AGE DESC
+SELECT TOP 1 * FROM EMP e WHERE e.AGE = (SELECT MAX(e.AGE) FROM EMP e)
 
 --5.  Вивести інформацію про всіх працівників, за виключенням працівників офісу з місцезнаходженням 'NEW YORK'
 
+SELECT * FROM EMP e
+JOIN DEPT d ON d.DEPTNO = e.DEPTNO
+WHERE d.LOC <> 'NEW YORK'
+
+SELECT * FROM EMP e
+JOIN DEPT d ON d.DEPTNO = e.DEPTNO
+
+EXCEPT
+
+SELECT * FROM EMP e
+JOIN DEPT d ON d.DEPTNO = e.DEPTNO
+WHERE d.LOC = 'NEW YORK'
+
 --6.    Використовуючи рекурсивний запит вивести всіх підлеглих менеджера ‘BLAKE’ з таблиці Emp
 
+WITH RecursiveQ
+AS
+(
+	SELECT Empno, MGR AS Parent_ID, ENAME, 0 as Level
+	FROM Emp e
+	WHERE ENAME = 'BLAKE'
+
+	UNION ALL
+
+	SELECT dep.Empno, dep.MGR as Parent_ID, dep.ENAME, Level + 1 as Level
+	FROM Emp dep
+	JOIN RecursiveQ rec ON dep.MGR = rec.Empno
+)
+SELECT Empno, Parent_ID, Ename, [Level]
+FROM RecursiveQ
+
  --7.  Вивести найменування відділу з найвищою середньою заробітною платою (табл. Emp, Dept)
+
+SELECT TOP 1 d.DNAME, AVG(e.SAL) avg_sal FROM EMP e 
+JOIN DEPT d ON d.DEPTNO = e.DEPTNO
+GROUP BY d.DNAME
+ORDER BY avg_sal DESC
+
+
+SELECT d.DNAME, AVG(e.SAL) avg_sal FROM EMP e 
+JOIN DEPT d ON d.DEPTNO = e.DEPTNO
+GROUP BY d.DNAME
+HAVING AVG(e.SAL) >= 
+(
+	SELECT MAX(avg_sal_inner) FROM 
+	(
+		SELECT AVG(e.SAL) avg_sal_inner FROM EMP e 
+		JOIN DEPT d ON d.DEPTNO = e.DEPTNO
+		GROUP BY d.DNAME
+	) as AVG_TABLE
+)

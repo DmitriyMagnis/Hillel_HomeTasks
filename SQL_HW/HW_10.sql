@@ -54,10 +54,17 @@ SELECT * FROM take
 
 --Завдання 1: Знайти студентів, які не відвідують курс 'CALCULUS'
 
-SELECT * FROM student s
+SELECT s.sno, s.sname FROM student s
+JOIN take t ON t.sno = s.sno
+JOIN courses c ON t.cno = c.cno
+WHERE c.title NOT IN ('CALCULUS')
+GROUP BY s.sno, s.sname
+
+SELECT s.sno, s.sname FROM student s
 LEFT JOIN take t ON t.sno = s.sno
 LEFT JOIN courses c ON t.cno = c.cno
 WHERE c.title NOT IN ('CALCULUS') OR c.title IS NULL
+GROUP BY s.sno, s.sname
 
 
 --Завдання 2: Завдання 2: Вивести курси, кількість credits яких дорівнює  середньому значенню credits всіх курсів
